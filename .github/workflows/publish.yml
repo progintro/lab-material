@@ -1,0 +1,36 @@
+name: Publish lab PDFs
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  convert-markdown-to-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Pandoc
+      run: sudo apt-get install -y pandoc
+
+    - name: Install LaTeX
+      run: sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-xetex
+
+    - name: Convert Markdown to LaTeX and compile to PDF
+      run: |
+        for file in labs/lab00/README.md; do
+          filename=$(echo "$file" | tr / - | sed 's/README.md//')
+          pandoc "$file" -o "${filename}.pdf"
+        done
+
+    - name: Upload PDFs to Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./*.pdf
+        asset_content_type: application/pdf

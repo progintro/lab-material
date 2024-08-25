@@ -17,13 +17,13 @@ jobs:
       run: sudo apt-get install -y pandoc
 
     - name: Install LaTeX
-      run: sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-xetex
+      run: sudo apt-get install -y texlive-xetex texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
 
     - name: Convert Markdown to LaTeX and compile to PDF
       run: |
         for file in labs/lab00/README.md; do
           filename=$(echo "$file" | tr / - | sed 's/README.md//')
-          pandoc "$file" -o "${filename}.pdf"
+          pandoc "$file" -s --pdf-engine=xelatex -o "${filename}.pdf"
         done
 
     - name: Upload PDFs to Release

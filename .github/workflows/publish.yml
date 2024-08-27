@@ -24,7 +24,7 @@ jobs:
 
     - name: Convert Markdown to LaTeX and compile to PDF
       run: |
-        cd labs/lab00 && pandoc README.md -f gfm -s --pdf-engine=xelatex -o "lab00.pdf"
+        cd labs/lab00 && pandoc README.md -f gfm -s --pdf-engine=xelatex -o "../../lab00.pdf"
 
     - name: Create Release
       id: create_release

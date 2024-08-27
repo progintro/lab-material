@@ -24,10 +24,7 @@ jobs:
 
     - name: Convert Markdown to LaTeX and compile to PDF
       run: |
-        for file in labs/lab00/README.md; do
-          filename=$(echo "$file" | tr / - | sed 's/README.md//')
-          pandoc "$file" -f gfm -s --pdf-engine=xelatex -o "lab00.pdf" -V mainfont="Avenir Next"
-        done
+        cd labs/lab00 && pandoc README.md -f gfm -s --pdf-engine=xelatex -o "lab00.pdf"
 
     - name: Create Release
       id: create_release

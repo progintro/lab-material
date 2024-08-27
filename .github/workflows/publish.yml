@@ -26,7 +26,7 @@ jobs:
       run: |
         for file in labs/lab00/README.md; do
           filename=$(echo "$file" | tr / - | sed 's/README.md//')
-          pandoc "$file" -s --pdf-engine=xelatex -o "${filename}.pdf"
+          pandoc "$file" -f gfm -s --pdf-engine=xelatex -o "lab00.pdf" -V mainfont="Avenir Next"
         done
 
     - name: Create Release
@@ -46,5 +46,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./*.pdf
+        asset_path: lab00.pdf
+        asset_name: lab00.pdf
         asset_content_type: application/pdf

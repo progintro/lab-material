@@ -27,7 +27,7 @@ jobs:
         set -x
         for dir in 00 01; do
           cd labs/lab$dir
-          pandoc README.md -f gfm -s --pdf-engine=xelatex -o "../../lab$dir.pdf"
+          pandoc README.md -f gfm -s --pdf-engine=xelatex -o "../../lab$dir.pdf" -V mainfont="DejaVu Sans" -V monofont="DejaVu Sans Mono"
           cd ../..
         done
 

@@ -54,12 +54,21 @@ jobs:
     - name: Install Pandoc and texlive dependencies
       run: sudo apt-get install -y pandoc hub texlive-xetex texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
 
+    - name: Inline mermaid images
+      run: |
+        set -x
+        for dir in 00 01; do
+          cd labs/lab$dir
+          docker run --rm -u `id -u`:`id -g` -v `pwd`:/data minlag/mermaid-cli -i README.md -o README-out.md
+          cd ../..
+        done
+        
     - name: Convert Markdown to LaTeX and compile to PDF
       run: |
         set -x
         for dir in 00 01; do
           cd labs/lab$dir
-          pandoc README.md -f gfm -s --pdf-engine=xelatex -o "../../lab$dir.pdf" -V mainfont="DejaVu Sans" -V monofont="DejaVu Sans Mono"
+          pandoc README-out.md -f gfm -s --pdf-engine=xelatex -o "../../lab$dir.pdf" -V mainfont="DejaVu Sans" -V monofont="DejaVu Sans Mono"
           cd ../..
         done
 

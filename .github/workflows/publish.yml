@@ -58,7 +58,7 @@ jobs:
           cd labs/lab$dir
           docker run -u `id -u`:`id -g` -v `pwd`:/data minlag/mermaid-cli \
             -i README.md -o README-out.md --outputFormat png \
-            --width 1920 --height 1080
+            --scale 10
           cd ../..
         done
 

@@ -51,11 +51,8 @@ jobs:
         git tag ${{ steps.new_version.outputs.version }}
         git push origin ${{ steps.new_version.outputs.version }}
 
-    - name: Install Pandoc
-      run: sudo apt-get install -y pandoc hub
-
-    - name: Install LaTeX
-      run: sudo apt-get install -y texlive-xetex texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
+    - name: Install Pandoc and texlive dependencies
+      run: sudo apt-get install -y pandoc hub texlive-xetex texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
 
     - name: Convert Markdown to LaTeX and compile to PDF
       run: |

@@ -65,7 +65,7 @@ jobs:
       run: |
         set -x
         for dir in 00 01; do
-          docker run -u `id -u`:`id -g` -w /data/labs/lab$dir -v `pwd`/../..:/data ghcr.io/ethan42/pandoctex pandoc README-out.md -f gfm -s --pdf-engine=xelatex -o "../../lab$dir.pdf" -V mainfont="DejaVu Sans" -V monofont="DejaVu Sans Mono"
+          docker run -u `id -u`:`id -g` -w /data/labs/lab$dir -v `pwd`:/data ghcr.io/ethan42/pandoctex pandoc README-out.md -f gfm -s --pdf-engine=xelatex -o "../../lab$dir.pdf" -V mainfont="DejaVu Sans" -V monofont="DejaVu Sans Mono"
         done
 
     - name: Install Pandoc and texlive dependencies

@@ -54,7 +54,7 @@ jobs:
     - name: Inline mermaid images
       run: |
         set -x
-        for dir in 00 01; do
+        for dir in 00 01 02; do
           cd labs/lab$dir
           docker run -u `id -u`:`id -g` -v `pwd`:/data minlag/mermaid-cli \
             -i README.md -o README-out.md --outputFormat png \
@@ -62,11 +62,11 @@ jobs:
           cd ../..
         done
 
-       
+
     - name: Convert Markdown to LaTeX and compile to PDF
       run: |
         set -x
-        for dir in 00 01; do
+        for dir in 00 01 02; do
           docker run -u `id -u`:`id -g` -w /data/labs/lab$dir -v `pwd`:/data ghcr.io/ethan42/pandoctex \
             pandoc README-out.md -f gfm -s \
             -H ../header.tex \

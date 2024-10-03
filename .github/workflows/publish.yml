@@ -72,7 +72,8 @@ jobs:
             -H ../header.tex \
             --pdf-engine=xelatex \
             -o "../../lab$dir.pdf" \
-            -V mainfont="DejaVu Sans" -V monofont="DejaVu Sans Mono"
+            -V mainfont="Linux Libertine O" \
+            -V monofont="Noto Mono"
         done
 
     - name: Install Pandoc and texlive dependencies

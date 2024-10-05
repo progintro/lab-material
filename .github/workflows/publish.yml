@@ -54,7 +54,7 @@ jobs:
     - name: Build PDFs
       run: make
 
-    - name: Install Pandoc and texlive dependencies
+    - name: Install Hub CLI
       run: sudo apt-get install -y hub
 
     - name: Upload PDFs to GitHub Releases

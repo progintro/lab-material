@@ -346,7 +346,17 @@ ls -l
 
 Το αποτέλεσμα που θα δούμε στην οθόνη μας θα είναι κάτι σαν το εξής:
 
-![](./img/media/image23.png)
+```sh
+linux14:/home/users/thanassis>ls -l
+total 676
+...
+-rw-r--r--   1 thanassis dep    652 Oct  1 10:25 list.py
+-rwxr-xr-x   1 thanassis dep  61258 Nov 23  2023 main*
+-rw-r--r--   1 thanassis dep    400 Nov 22  2023 main.c
+drwxr-xr-x   3 thanassis dep   4096 Oct 13  2023 progintro/
+drwxr-s---   6 thanassis www   4096 Oct  3 22:40 public_html/
+linux14:/home/users/thanassis>
+```
 
 Ας δούμε λίγο πιο αναλυτικά τι σημαίνουν αυτά που βλέπουμε στην οθόνη
 μας:
@@ -373,18 +383,18 @@ ls -l
 cd όνομα_καταλόγου
 ```
 
-Ας μπούμε τώρα στον κατάλογο Mail και να ελέγξουμε τα περιεχόμενα του.
+Ας μπούμε τώρα στον κατάλογο `public_html` (ή όποιον άλλο φάκελο φτιάξετε με την εντολή `mkdir`) και να ελέγξουμε τα περιεχόμενα του.
 Πληκτρολογούμε:
 
-```bash
-cd Mail
+```sh
+cd public_html
 
 ls -l
 ```
 
 Για να επιστρέψουμε στον αρχικό κατάλογό μας, γράφουμε:
 
-```bash
+```sh
 cd ..
 ```
 

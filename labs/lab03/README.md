@@ -214,7 +214,10 @@ do...while.
 
 #### 1.6
 
-$S\_{1} = \\frac{1}{1^{2}} - \\frac{1}{2^{2}} + \\frac{1}{3^{2}} - \\frac{1}{4^{2}} + \\frac{1}{5^{2}} - \\frac{1}{6^{2}} + \\text{.}\\text{.}\\text{.}$
+$$
+S_{1} = \frac{1}{1^{2}} - \frac{1}{2^{2}} + \frac{1}{3^{2}} - \frac{1}{4^{2}} + \frac{1}{5^{2}} - \frac{1}{6^{2}} + \dots
+$$
+
 Τροποποιήστε το πρόγραμμα σας, ώστε να υπολογίζει την σειρά:
 
 #### 1.7 Επαναλάβετε και για τις σειρές που εμφανίζονται στις σημειώσεις του μαθήματος, σελ. 23.
@@ -315,21 +318,30 @@ E<sub>2</sub></p>
 Ο ακόλουθος αλγόριθμος υπολογίζει την ημέρα που αντιστοιχεί σε μία
 δεδομένη ημερομηνία:
 
-Έστω η ημερομηνία $\\frac{\\frac{\\text{DD}}{\\text{MM}}}{\\text{YYYY}}$
+Έστω η ημερομηνία
 
-Αν MM ≤ 2 τότε
+$$
+\frac{\frac{\text{DD}}{\text{MM}}}{\text{YYYY}}
+$$
 
-$\\begin{matrix}
-\\text{NYYYY} = \\text{YYYY} - 1 \\\\
-\\text{NMM} = 0 \\\\
-\\end{matrix}$
+**Αν $\text{MM} \leq 2$ τότε:**
 
-Αν MM \> 2 τότε
+$$
+\begin{matrix}
+\text{NYYYY} = \text{YYYY} - 1 \\
+\text{NMM} = 0 \\
+\end{matrix}
+$$
 
-$\\begin{matrix}
-\\text{NYYYY} = \\text{YYYY} \\\\
-\\text{NMM} = \\left\\lfloor \\frac{4 \\ast \\text{MM} + \\text{23}}{\\text{10}} \\right\\rfloor \\\\
-\\end{matrix}$
+**Αν $\text{MM} > 2$ τότε:**
+
+$$
+\begin{matrix}
+\text{NYYYY} = \text{YYYY} \\
+\text{NMM} = \left\lfloor \frac{4 \times \text{MM} + 23}{10} \right\rfloor \\
+\end{matrix}
+$$
+
 
 Αν IDAYmod7 = 0 τότε DAY = Saturday
 
@@ -337,7 +349,7 @@ $\\begin{matrix}
 
 Αν IDAYmod7 = 6 τότε DAY = Friday
 
-Με ⌊*x*⌋ συμβολίζουμε τον μέγιστο ακέραιο αριθμό που δεν είναι
+Με $\lfloor x \rfloor$  συμβολίζουμε τον μέγιστο ακέραιο αριθμό που δεν είναι
 μεγαλύτερος του αριθμού x.
 
 Γράψτε πρόγραμμα C που να βρίσκει τι ημέρα γεννηθήκατε (ενσωματώστε την

@@ -212,7 +212,6 @@ int main() {
   int number;
 
   printf("Please give me a number: ");
-  fflush(stdout);
   scanf("%d", &number);
 
   printf("I just read this number: %d\n", number);

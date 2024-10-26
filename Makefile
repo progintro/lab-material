@@ -2,7 +2,7 @@
 
 BUILD_FOLDER ?= build
 
-PDFs = lab00.pdf lab01.pdf lab02.pdf lab03.pdf
+PDFs = lab03.pdf
 
 TARGETS = $(PDFs:%=$(BUILD_FOLDER)/%)
 
@@ -34,6 +34,6 @@ $(BUILD_FOLDER)/%.pdf: $(BUILD_FOLDER) labs/header.tex labs/%/README-out.md
 		--pdf-engine=xelatex \
 		-o "../../$(BUILD_FOLDER)/$*.pdf" \
 		-V mainfont="Linux Libertine O" \
-		-V monofont="Noto Mono" \
+		-V monofont="Noto Sans" \
 		-V fontsize=12pt \
 		-V colorlinks=true -V linkcolor=darkgray -V urlcolor=blue -V toccolor=gray

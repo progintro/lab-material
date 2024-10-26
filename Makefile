@@ -2,7 +2,7 @@
 
 BUILD_FOLDER ?= build
 
-PDFs = lab00.pdf lab01.pdf lab02.pdf
+PDFs = lab00.pdf lab01.pdf lab02.pdf lab03.pdf
 
 TARGETS = $(PDFs:%=$(BUILD_FOLDER)/%)
 

@@ -34,6 +34,6 @@ $(BUILD_FOLDER)/%.pdf: $(BUILD_FOLDER) labs/header.tex labs/%/README-out.md
 		--pdf-engine=xelatex \
 		-o "../../$(BUILD_FOLDER)/$*.pdf" \
 		-V mainfont="Linux Libertine O" \
-		-V monofont="Noto Sans" \
+		-V monofont="Noto Mono" \
 		-V fontsize=12pt \
 		-V colorlinks=true -V linkcolor=darkgray -V urlcolor=blue -V toccolor=gray

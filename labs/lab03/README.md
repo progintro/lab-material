@@ -92,7 +92,7 @@ $$
 
 ή αλλιώς γραμμένη ως:
 
-$$ S_{1} = \sum_{i=1}^\infty \frac{(-1)^{n-1}}{n^2} $$
+$$ S_{1} = \sum_{i=1}^\infty \frac{(-1)^{i-1}}{n^2} $$
 
 Η συνάρτησή σας θέλουμε να ζητάει από τον χρήστη το πλήθος των όρων που θα χρησιμοποιήσει και να τυπώνει το αποτέλεσμα με ακρίβεια 6 δεκαδικών ψηφίων. Μπορείτε να χρησιμοποιήσετε όποια δομή επανάληψης επιθυμείτε.
 
@@ -106,25 +106,25 @@ $$ S_{1} = \sum_{i=1}^\infty \frac{(-1)^{n-1}}{n^2} $$
 - Συνάρτηση `harmonic` [[3]](https://en.wikipedia.org/wiki/Harmonic_series_(mathematics)) που υπολογίζει το άθροισμα:
 
 $$
-S_{2} = \sum_{i=1}^\infty \frac{(-1)^{n+1}}{n} = \frac{1}{1} - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots
+S_{2} = \sum_{i=1}^\infty \frac{(-1)^{i+1}}{i} = \frac{1}{1} - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots
 $$
 
 - Συνάρτηση `leibniz` [[4]](https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80) που να υπολογίζει το άθροισμα:
 
 $$
-S_{3} = \sum_{i=1}^\infty \frac{(-1)^{n+1}}{2n+1} = \frac{1}{1} - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \cdots
+S_{3} = \sum_{i=1}^\infty \frac{(-1)^{i+1}}{2i+1} = \frac{1}{1} - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \cdots
 $$
 
 - Συνάρτηση `zeta_four` [[5]](https://en.wikipedia.org/wiki/Riemann_zeta_function) που να υπολογίζει το άθροισμα:
 
 $$
-S_{6} = \sum_{i=1}^\infty \frac{1}{n^4} = \frac{1}{1^4} + \frac{1}{2^4} + \frac{1}{3^4} + \frac{1}{4^4} + \cdots
+S_{6} = \sum_{i=1}^\infty \frac{1}{i^4} = \frac{1}{1^4} + \frac{1}{2^4} + \frac{1}{3^4} + \frac{1}{4^4} + \cdots
 $$
 
 - Συνάρτηση `wallis` [[6]](https://en.wikipedia.org/wiki/Wallis_product) που να υπολογίζει το γινόμενο:
 
 $$
-P = \prod_{i=1}^\infty \frac{2n}{2n-1}\cdot {2n}{2n+1} = \frac{2}{1} \cdot \frac{2}{3} \cdot \frac{4}{3} \cdot \frac{4}{5} \cdot \frac{6}{5} \cdot \frac{6}{7} \cdots
+P = \prod_{i=1}^\infty \frac{2i}{2i-1}\cdot {2i}{2i+1} = \frac{2}{1} \cdot \frac{2}{3} \cdot \frac{4}{3} \cdot \frac{4}{5} \cdot \frac{6}{5} \cdot \frac{6}{7} \cdots
 $$
 
 

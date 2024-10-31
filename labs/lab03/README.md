@@ -124,7 +124,7 @@ $$
 - Συνάρτηση `wallis` [[6]](https://en.wikipedia.org/wiki/Wallis_product) που να υπολογίζει το γινόμενο:
 
 $$
-P = \prod_{i=1}^\infty \frac{2i}{2i-1}\cdot {2i}{2i+1} = \frac{2}{1} \cdot \frac{2}{3} \cdot \frac{4}{3} \cdot \frac{4}{5} \cdot \frac{6}{5} \cdot \frac{6}{7} \cdots
+P = \prod_{i=1}^\infty \frac{2i}{2i-1}\cdot \frac{2i}{2i+1} = \frac{2}{1} \cdot \frac{2}{3} \cdot \frac{4}{3} \cdot \frac{4}{5} \cdot \frac{6}{5} \cdot \frac{6}{7} \cdots
 $$
 
 

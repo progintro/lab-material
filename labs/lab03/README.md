@@ -189,7 +189,12 @@ $$
 \end{matrix}
 $$
 
-$$ IDAY = 365 \cdot YYYY + DD + 31 \cdot (MM - 1) - NMM + \left\lfloor \frac{NYYYY}{4}\right\rfloor - \left\lfloor \frac{3}{4} \cdot \left(\left\lfloor \frac{NYYYY}{100} \right\rfloor + 1\right) \right\rfloor $$
+$$
+IDAY = 365 \cdot YYYY + DD + 31 \cdot (MM - 1) - NMM + \left\lfloor \frac{NYYYY}{4}\right\rfloor - \left\lfloor \frac{3}{4} \cdot \left(\left\lfloor \frac{NYYYY}{100} \right\rfloor + 1\right) \right\rfloor
+$$
+$$ + \left\lfloor \frac{NYYYY}{400} \right\rfloor$$
+
+- **Δίσεκτο Έτος:** Ένα έτος είναι δίσεκτο αν διαιρείται με το 4, **εκτός** εάν διαιρείται και με το 100, **εκτός** αν διαιρείται και με το 400. Ο παραπάνω τύπος υπολογίζει αυτόματα αν το έτος είναι δίσεκτο, χρησιμοποιώντας το $\left\lfloor \frac{NYYYY}{4}\right\rfloor$, $\left\lfloor \frac{NYYYY}{100} \right\rfloor$, και $\left\lfloor \frac{NYYYY}{400}\right\rfloor$.
 
 Για τον υπολογισμό της ημέρας, αν:
 

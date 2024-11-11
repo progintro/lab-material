@@ -46,8 +46,8 @@ Iterative result: 9
 Recursive result: 9
 $ ./collatz
 Number to find the length of the collatz sequence: 950000001
-Iterative result: 198
-Recursive result: 198
+Iterative result: 199
+Recursive result: 199
 ```
 
 Κάποιο από τα αποτελέσματά μας δεν συμφωνεί; Τι μπορεί να πηγαίνει στραβά;
@@ -57,8 +57,8 @@ Recursive result: 198
 
 ```
 $ ./collatz 950000001
-Iterative result: 198
-Recursive result: 198
+Iterative result: 199
+Recursive result: 199
 ```
 
 ## Άσκηση 2. Η ακολουθία Fibonacci (fib.c).

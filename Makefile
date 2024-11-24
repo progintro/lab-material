@@ -2,11 +2,12 @@
 
 BUILD_FOLDER ?= build
 
-PDFs = lab00.pdf lab01.pdf lab02.pdf lab03.pdf lab04.pdf lab05.pdf lab06.pdf lab07.pdf
+PDFs = $(foreach n, $(shell seq -w 0 10), lab$(n).pdf)
 
 TARGETS = $(PDFs:%=$(BUILD_FOLDER)/%)
+ALL = $(BUILD_FOLDER)/all.pdf
 
-all: $(TARGETS)
+all: $(BUILD_FOLDER) $(TARGETS) $(ALL)
 
 # Step 0: Create build folder
 $(BUILD_FOLDER):
@@ -23,7 +24,7 @@ labs/%/README-out.md: labs/%/README.md
 		--scale 10
 
 # Step 2: Generate PDFs from README-out.md using pandoc
-$(BUILD_FOLDER)/%.pdf: $(BUILD_FOLDER) labs/header.tex labs/%/README-out.md
+$(BUILD_FOLDER)/%.pdf: labs/header.tex labs/%/README-out.md
 	docker run \
 		-u $(shell id -u):$(shell id -g) \
 		-w /data/labs/$* \
@@ -37,3 +38,12 @@ $(BUILD_FOLDER)/%.pdf: $(BUILD_FOLDER) labs/header.tex labs/%/README-out.md
 		-V monofont="Noto Mono" \
 		-V fontsize=12pt \
 		-V colorlinks=true -V linkcolor=darkgray -V urlcolor=blue -V toccolor=gray
+
+# Step 3: Merge all PDFs into one
+$(ALL): $(TARGETS)
+	docker run \
+		-u $(shell id -u):$(shell id -g) \
+		-v $(shell pwd):/data \
+		-w /data/ \
+		minidocks/poppler \
+		pdfunite $(TARGETS) $(ALL)

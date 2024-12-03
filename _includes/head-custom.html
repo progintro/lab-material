@@ -9,6 +9,15 @@ MathJax = {
 <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 <script>
-  mermaid.initialize({ startOnLoad: true });
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("code.language-mermaid").forEach((block) => {
+      const parent = block.parentElement;
+      const mermaidDiv = document.createElement("div");
+      mermaidDiv.classList.add("mermaid");
+      mermaidDiv.innerHTML = block.textContent;
+      parent.replaceWith(mermaidDiv);
+    });
+    mermaid.initialize({ startOnLoad: true });
+  })
 </script>
   

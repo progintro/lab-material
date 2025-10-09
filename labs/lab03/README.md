@@ -110,7 +110,7 @@ $$
 - Συνάρτηση `leibniz` [[4]](https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80) που να υπολογίζει το άθροισμα:
 
 $$
-S_{3} = \sum_{i=0}^\infty \frac{(-1)^{i+1}}{2i+1} = \frac{1}{1} - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \cdots
+S_{3} = \sum_{i=0}^\infty \frac{(-1)^{i}}{2i+1} = \frac{1}{1} - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \cdots
 $$
 
 - Συνάρτηση `zeta_four` [[5]](https://en.wikipedia.org/wiki/Riemann_zeta_function) που να υπολογίζει το άθροισμα:

@@ -447,7 +447,7 @@ git config --global user.name "Christos Dokimopoulos"
 
 ## Άσκηση (ότι θα κάνουμε και στις ασκήσεις)
 
-Πατήστε τον [ακόλουθο σύνδεσμο](https://classroom.github.com/a/nFMwiWAQ) για να δημιουργήσετε το δικό σας repository `progintro/lab01-YourGitHub` και πραγματοποιήστε τα ακόλουθα βήματα:
+Πατήστε τον [ακόλουθο σύνδεσμο](https://classroom.github.com/a/8_3_scjJ) για να δημιουργήσετε το δικό σας repository `progintro/lab01-YourGitHub` και πραγματοποιήστε τα ακόλουθα βήματα:
 
 1. Κατεβάστε το repository τοπικά τρέχοντας την εντολή:
 

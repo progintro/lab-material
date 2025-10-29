@@ -146,7 +146,7 @@ EOF που είναι ορισμένη στο stdio.h.
 ακριβώς δύο ψηφία. Παράδειγμα εκτέλεσης ακολουθεί:
 
 ```sh
-$ /bin/echo hello world | ./encode
+$ echo hello world | ./encode
 68656c6c6f20776f726c640a
 ```
 
@@ -162,7 +162,7 @@ $ /bin/echo hello world | ./encode
 τον δεκαεξαδικό αριθμό. Παράδειγμα εκτέλεσης ακολουθεί:
 
 ```sh
-$ /bin/echo 68656c6c6f20776f726c640a | ./decode
+$ echo 68656c6c6f20776f726c640a | ./decode
 hello world
 ```
 
@@ -178,6 +178,6 @@ hello world
 αρχείο `encoded_text`. Παράδειγμα εκτέλεσης ακολουθεί:
 
 ```sh
-$ /bin/echo hello world | ./encode | ./decode
+$ echo hello world | ./encode | ./decode
 hello world
 ```

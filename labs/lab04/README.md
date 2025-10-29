@@ -162,7 +162,7 @@ $ /bin/echo hello world | ./encode
 τον δεκαεξαδικό αριθμό. Παράδειγμα εκτέλεσης ακολουθεί:
 
 ```sh
-$ /bin/echo -ne 68656c6c6f20776f726c640a | ./decode
+$ /bin/echo 68656c6c6f20776f726c640a | ./decode
 hello world
 ```
 

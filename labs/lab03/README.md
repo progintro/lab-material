@@ -127,7 +127,7 @@ $$
 
 - Συνάρτηση `ramanujan` [[7]](https://en.wikipedia.org/wiki/Ramanujan%E2%80%93Sato_series) που να υπολογίζει το π χρησιμοποιώντας την σχέση:
 
-$$ \frac{1}{\pi} = \frac{2\sqrt{2}}{9801} \sum_{k=0}^{\infty} \frac{(4k)! \, (1103 + 26390k)}{(k!)^4 \, 396^{4k}} $$
+$$ \frac{1}{\pi} = \frac{2\sqrt{2}}{9801} \sum_{k=0}^{\infty} \frac{(4k)! \cdot (1103 + 26390k)}{(k!)^4 \cdot 396^{4k}} $$
 
 
 ## Άσκηση 2: Υπολογισμός ριζών τριωνύμου (root.c)

@@ -125,6 +125,17 @@ $$
 P = \prod_{i=1}^\infty \frac{2i}{2i-1}\cdot \frac{2i}{2i+1} = \frac{2}{1} \cdot \frac{2}{3} \cdot \frac{4}{3} \cdot \frac{4}{5} \cdot \frac{6}{5} \cdot \frac{6}{7} \cdots
 $$
 
+- Συνάρτηση `ramanujan` [[7]](https://en.wikipedia.org/wiki/Ramanujan%E2%80%93Sato_series) που να υπολογίζει το π χρησιμοποιώντας την σχέση:
+
+$$
+\frac{1}{\pi}
+=
+\frac{2\sqrt{2}}{9801}
+\sum_{k=0}^{\infty}
+\frac{(4k)! \, (1103 + 26390k)}
+{(k!)^4 \, 396^{4k}}
+$$
+
 
 ## Άσκηση 2: Υπολογισμός ριζών τριωνύμου (root.c)
 

@@ -1,3 +1,7 @@
 README-out.md
 build
 README-out*.png
+_site
+.jekyll-cache
+README-pdf.md
+all.md

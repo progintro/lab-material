@@ -1,0 +1,63 @@
+% Preamble used only for the combined build/all.pdf.
+%
+% Turns the concatenation of the eleven labs into a single book: a cover page, then
+% pandoc's table of contents, then each lab starting on a fresh page with page numbers
+% running continuously throughout.
+
+% Suppresses the per-lab masthead defined in header.tex - the cover replaces it.
+\def\nomasthead{}
+
+% Every lab's H1 becomes a \section, so this starts each lab on a new page.
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+
+\AtBeginDocument{%
+  \begin{titlepage}
+    \centering
+    \vspace*{0.6cm}
+
+    \includegraphics[width=0.74\textwidth]{uoa.jpg}
+
+    \vspace{1.1cm}
+    {\color{ditcyan}\rule{0.85\textwidth}{1.4pt}}
+
+    \vspace{0.9cm}
+    {\Huge\bfseries Εργαστήρια\par}
+    \vspace{0.45cm}
+    {\LARGE Εισαγωγή στον Προγραμματισμό\par}
+    \vspace{0.25cm}
+    {\large\color{ditcharcoal}κ08\par}
+
+    \vspace{0.75cm}
+    {\color{ditcharcoal}\rule{0.85\textwidth}{0.5pt}}
+
+    \vspace{0.9cm}
+    \includegraphics[width=0.14\textwidth]{dit.jpg}
+
+    \vspace{0.45cm}
+    {\large Τμήμα Πληροφορικής και Τηλεπικοινωνιών\par}
+    {\large Εθνικό και Καποδιστριακό Πανεπιστήμιο Αθηνών\par}
+
+    \vfill
+
+    \begin{minipage}{0.9\textwidth}
+      \centering\scriptsize
+      Το υλικό των εργαστηρίων είναι αποτέλεσμα προσπάθειας πολλών και εξαίρετων
+      συνεργατών. Θερμές ευχαριστίες στους Δημήτρη Ψούνη, Στέφανο Σταμάτη,
+      Νίκο Ποθητό, Μάνο Καρβούνη, Γιώργο Καστρίνη, Βασίλη Αναστασίου,
+      Γιώργο Σπύρου και στον Δρ.~Ιωάννη Χαμόδρακα για τη συνεισφορά τους.
+      Το υλικό των φυλλαδίων είναι βασισμένο στο αντίστοιχο υλικό που αναπτύχθηκε
+      για το μάθημα από τον καθηγητή Παναγιώτη Σταματόπουλο, τον οποίο
+      ευχαριστούμε θερμότατα.\par
+    \end{minipage}
+
+    \vspace{0.7cm}
+    % \color (a switch) rather than \textcolor (a short command): the argument of
+    % \textcolor cannot contain a \par.
+    {\scriptsize\color{ditcharcoal}%
+      Διατίθεται υπό την άδεια MIT \quad\textbullet\quad
+      \texttt{github.com/progintro/lab-material}\par}
+
+    \vspace{0.4cm}
+  \end{titlepage}
+}

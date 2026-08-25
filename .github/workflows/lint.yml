@@ -1,0 +1,42 @@
+name: Lint and build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint lab material
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check tables of contents are up to date
+        run: make check-toc
+
+      - name: Run linter
+        # --strict: the tree is at zero errors and zero warnings, so every check is
+        # blocking. Missing image alt text, untagged code fences, leftover .doc
+        # escapes, homoglyphs, dead anchors, heading/body filename mismatches and
+        # cross-lab filename collisions all fail the build if reintroduced.
+        run: python3 tools/lint.py --strict
+
+  build:
+    name: Build PDFs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Catches a broken build on the pull request instead of at release time, which is
+      # the only place it used to surface.
+      - name: Build all lab PDFs
+        run: make
+
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-pdfs
+          path: build/*.pdf
+          if-no-files-found: error

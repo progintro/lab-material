@@ -21,3 +21,45 @@ MathJax = {
   })
 </script>
   
+
+<style>
+  /* Brand palette, taken from the two institutional marks: the dit cyan and charcoal
+     blocks and the cornflower blue of the UOA crest. Kept in sync with labs/header.tex,
+     which applies the same colours to the PDFs. */
+  :root {
+    --dit-cyan: #0B7FA3;
+    --dit-charcoal: #444444;
+    --uoa-blue: #3F6FB5;
+  }
+
+  .markdown-body a { color: var(--dit-cyan); }
+  .markdown-body h1, .markdown-body h2 { border-bottom-color: #dfe6ea; }
+  .markdown-body h2 { color: var(--dit-charcoal); }
+
+  .lab-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    padding: 10px 0;
+    margin: 0;
+  }
+  .lab-nav-top { border-bottom: 2px solid var(--dit-cyan); margin-bottom: 24px; }
+  .lab-nav-bottom { border-top: 2px solid var(--dit-cyan); margin-top: 40px; }
+  .lab-nav-side { flex: 1; }
+  .lab-nav-right { text-align: right; }
+  .lab-nav-mid { flex: 0 0 auto; color: #6a737d; }
+  .lab-nav a { color: var(--dit-cyan); text-decoration: none; font-weight: 600; }
+  .lab-nav a:hover { text-decoration: underline; }
+
+  .lab-index td:first-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  .crest-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .crest-row img { max-height: 64px; width: auto; }
+</style>

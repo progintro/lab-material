@@ -14,58 +14,45 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Fetch tags
-      run: git fetch --tags
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        fetch-tags: true
 
     - name: Get latest tag
       id: get_tag
       run: |
-        latest_tag=$(git describe --tags `git rev-list --tags --max-count=1` || true)
-        echo "Latest tag: $latest_tag"
-        echo "::set-output name=tag::$latest_tag"
+        latest_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2>/dev/null || true)
+        echo "Latest tag: ${latest_tag:-<none>}"
+        echo "tag=$latest_tag" >> "$GITHUB_OUTPUT"
 
     - name: Calculate new version
       id: new_version
       run: |
-        if [ -z "${{ steps.get_tag.outputs.tag }}" ]; then
-          # No tags found, set initial version
+        latest_version="${{ steps.get_tag.outputs.tag }}"
+        if [ -z "$latest_version" ]; then
           new_version="0.1.0"
         else
-          # Parse the latest version
-          latest_version=${{ steps.get_tag.outputs.tag }}
-          IFS='.' read -r -a version_parts <<< "$latest_version"
-          major=${version_parts[0]}
-          minor=${version_parts[1]}
-          patch=${version_parts[2]}
-          # Increment the patch version
-          patch=$((patch+1))
+          IFS='.' read -r major minor patch <<< "$latest_version"
+          patch=$((patch + 1))
           new_version="$major.$minor.$patch"
         fi
         echo "New version: $new_version"
-        echo "::set-output name=version::$new_version"
+        echo "version=$new_version" >> "$GITHUB_OUTPUT"
 
     - name: Create new tag
       run: |
-        git tag ${{ steps.new_version.outputs.version }}
-        git push origin ${{ steps.new_version.outputs.version }}
+        git tag "${{ steps.new_version.outputs.version }}"
+        git push origin "${{ steps.new_version.outputs.version }}"
 
     - name: Build PDFs
       run: make
 
-    - name: Install Hub CLI
-      run: sudo apt-get update --fix-missing && sudo apt-get install -y hub
-
     - name: Upload PDFs to GitHub Releases
       run: |
-        set -x
-        cd build
-        assets=()
-        for asset in ./*.pdf; do
-          assets+=("-a" "$asset")
-        done
         tag_name="${{ steps.new_version.outputs.version }}"
-        hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
+        gh release create "$tag_name" build/*.pdf \
+          --title "$tag_name" \
+          --notes "Εργαστηριακό υλικό — έκδοση $tag_name"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,1 +1,63 @@
 \usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{lastpage}
+
+% Long lines inside code blocks (terminal transcripts, valgrind/gdb output) used to
+% run off the right margin and get clipped. fvextra wraps them and marks the
+% continuation with a hook arrow.
+\usepackage{fvextra}
+\fvset{breaklines=true,breakanywhere=true}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\},breaklines=true,breakanywhere=true}
+\DefineVerbatimEnvironment{verbatim}{Verbatim}{breaklines=true,breakanywhere=true}
+
+% Palette taken from the two institutional marks: the dit cyan and charcoal blocks,
+% and the cornflower blue of the UOA crest.
+\definecolor{ditcyan}{HTML}{0B7FA3}
+\definecolor{ditcharcoal}{HTML}{444444}
+\definecolor{uoablue}{HTML}{3F6FB5}
+
+% Logos live in assets/ at the repo root. The first path works when pandoc runs from
+% inside a lab directory (per-lab PDFs), the second when it runs from the repo root
+% (the combined all.pdf).
+\graphicspath{{../../assets/}{./assets/}}
+
+% Filled in per lab by the Makefile; harmless default so the file also stands alone.
+\providecommand{\labtitle}{}
+\providecommand{\coursename}{Εισαγωγή στον Προγραμματισμό}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+\fancyhead[L]{\footnotesize\textcolor{ditcharcoal}{\coursename}}
+\fancyhead[R]{\footnotesize\textcolor{ditcharcoal}{\labtitle}}
+\fancyfoot[C]{\footnotesize\textcolor{ditcharcoal}{\thepage\ / \pageref{LastPage}}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\color{ditcyan}\hrule height 0.4pt}
+
+% Branded masthead at the top of the first page, above the lab's own H1.
+% Suppressed for the combined all.pdf, which uses a full cover page instead
+% (labs/cover.tex defines \nomasthead). \ifdefined is used rather than a \newif flag
+% because pandoc emits -V header-includes *before* this file, so a flag declared here
+% could not be set from the command line.
+\AtBeginDocument{%
+  \ifdefined\nomasthead\else
+  \thispagestyle{fancy}%
+  \noindent
+  \begin{minipage}[c]{0.68\linewidth}%
+    \includegraphics[width=\linewidth]{uoa.jpg}%
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.17\linewidth}%
+    \raggedleft\includegraphics[width=\linewidth]{dit.jpg}%
+  \end{minipage}%
+  \par\vspace{6pt}%
+  \noindent\textcolor{ditcyan}{\rule{\linewidth}{1.2pt}}%
+  \par\vspace{2pt}%
+  \noindent{\footnotesize\textcolor{ditcharcoal}{%
+    Τμήμα Πληροφορικής και Τηλεπικοινωνιών \quad\textbullet\quad \coursename}}%
+  \par\vspace{4pt}%
+  \noindent\textcolor{ditcharcoal}{\rule{\linewidth}{0.4pt}}%
+  \par\vspace{18pt}%
+  \fi
+}

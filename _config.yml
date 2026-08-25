@@ -1,0 +1,24 @@
+# GitHub Pages configuration.
+#
+# The theme used to be selected in the repository's Settings UI, which meant it was
+# invisible to anyone reading the repo and could change without a commit. It is pinned
+# here instead - jekyll-theme-primer is what the site has been rendering with.
+title: Εργαστήρια — Εισαγωγή στον Προγραμματισμό
+description: >-
+  Υλικό εργαστηρίων για το μάθημα «Εισαγωγή στον Προγραμματισμό» (κ08),
+  Τμήμα Πληροφορικής και Τηλεπικοινωνιών, Εθνικό και Καποδιστριακό Πανεπιστήμιο Αθηνών.
+theme: jekyll-theme-primer
+lang: el
+
+# Everything below is build machinery or source material, not part of the website.
+exclude:
+  - Makefile
+  - CLAUDE.md
+  - CONTRIBUTING.md
+  - build/
+  - docs/
+  - tools/
+  - "*.pdf"
+  - "*.c"
+  - "*.txt"
+  - README-out.md

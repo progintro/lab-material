@@ -1,0 +1,25 @@
+---
+layout: default
+---
+
+<nav class="lab-nav lab-nav-top" aria-label="Πλοήγηση εργαστηρίων">
+  <span class="lab-nav-side">
+    {% if page.prev %}<a href="{{ site.baseurl }}/labs/{{ page.prev }}/">&larr; Προηγούμενο</a>{% endif %}
+  </span>
+  <span class="lab-nav-mid"><a href="{{ site.baseurl }}/">Όλα τα εργαστήρια</a></span>
+  <span class="lab-nav-side lab-nav-right">
+    {% if page.next %}<a href="{{ site.baseurl }}/labs/{{ page.next }}/">Επόμενο &rarr;</a>{% endif %}
+  </span>
+</nav>
+
+{{ content }}
+
+<nav class="lab-nav lab-nav-bottom" aria-label="Πλοήγηση εργαστηρίων">
+  <span class="lab-nav-side">
+    {% if page.prev %}<a href="{{ site.baseurl }}/labs/{{ page.prev }}/">&larr; Προηγούμενο</a>{% endif %}
+  </span>
+  <span class="lab-nav-mid"><a href="{{ site.baseurl }}/">Όλα τα εργαστήρια</a></span>
+  <span class="lab-nav-side lab-nav-right">
+    {% if page.next %}<a href="{{ site.baseurl }}/labs/{{ page.next }}/">Επόμενο &rarr;</a>{% endif %}
+  </span>
+</nav>

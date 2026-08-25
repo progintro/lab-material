@@ -39,7 +39,7 @@
 ## Συνεισφορές
 
 Δεχόμαστε με χαρά διορθώσεις και προσθήκες — δείτε το
-[CONTRIBUTING.md](CONTRIBUTING.md) για το πώς χτίζονται τα PDF και πώς να στείλετε
+[CONTRIBUTING.md](https://github.com/progintro/lab-material/blob/main/CONTRIBUTING.md) για το πώς χτίζονται τα PDF και πώς να στείλετε
 μια αλλαγή.
 
 ## Άδεια χρήσης

@@ -3,7 +3,7 @@
 # The theme used to be selected in the repository's Settings UI, which meant it was
 # invisible to anyone reading the repo and could change without a commit. It is pinned
 # here instead - jekyll-theme-primer is what the site has been rendering with.
-title: Εργαστήρια — Εισαγωγή στον Προγραμματισμό
+title: Εργαστήρια - Εισαγωγή στον Προγραμματισμό
 description: >-
   Υλικό εργαστηρίων για το μάθημα «Εισαγωγή στον Προγραμματισμό» (Κ08),
   Τμήμα Πληροφορικής και Τηλεπικοινωνιών, Εθνικό και Καποδιστριακό Πανεπιστήμιο Αθηνών.

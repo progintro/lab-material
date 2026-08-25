@@ -45,7 +45,7 @@ BADGES = ("Παλιό θέμα", "Προχωρημένο", "Προαιρετικ
 H2_STEP = re.compile(r"^Βήμα (\d+): \S")
 H2_EXERCISE = re.compile(
     r"^Άσκηση (\d+)(?: \(([^)]+)\))?: (.+?) "
-    r"\(([a-z_][a-z0-9_]*\.[ch](?: και [a-z_][a-z0-9_]*\.[ch])*)\)$"
+    r"\(([a-z_][a-z0-9_]*\.(?:c|h|txt)(?: και [a-z_][a-z0-9_]*\.(?:c|h|txt))*)\)$"
 )
 H2_ONWARD = re.compile(r"^Για να πάτε παρακάτω \(Προαιρετικό\)$")
 H2_APPENDIX = re.compile(r"^Παράρτημα: \S")
@@ -347,13 +347,13 @@ def check_framing(path):
     m = re.search(r"\*\*Αρχεία που θα φτιάξετε:\*\*(.*)", head)
     if not m:
         return
-    declared = set(re.findall(r"`([A-Za-z_][A-Za-z0-9_]*\.[ch])`", m.group(1)))
+    declared = set(re.findall(r"`([A-Za-z_][A-Za-z0-9_]*\.(?:c|h|txt))`", m.group(1)))
 
     named = set()
     for line in text.split("\n"):
         hm = re.match(r"^#{2,3} (Άσκηση .*)", line)
         if hm:
-            named |= set(re.findall(r"([a-z_][a-z0-9_]*\.[ch])", hm.group(1)))
+            named |= set(re.findall(r"([a-z_][a-z0-9_]*\.(?:c|h|txt))", hm.group(1)))
 
     for f in sorted(named - declared):
         add("todo", "framing", path, 1,

@@ -25,6 +25,9 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import anchors
+
 LABS = [f"lab{n:02d}" for n in range(11)]
 OUT = "build/all.md"
 
@@ -43,6 +46,9 @@ def prepare(lab):
 
     # drop the injected TOC block
     text = re.sub(r"<!-- toc -->.*?<!-- /toc -->\n*", "", text, flags=re.S)
+
+    # resolve short <a id=...> section anchors; the LaTeX writer drops raw HTML
+    text = anchors.resolve(text)
 
     # make image paths relative to the repository root
     text = text.replace("](./img/", f"](labs/{lab}/img/")

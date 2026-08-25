@@ -351,17 +351,18 @@ def check_framing(path):
 
     named = set()
     for line in text.split("\n"):
-        hm = re.match(r"^#{2,3} (Άσκηση .*)", line)
+        # Βήμα sections count too: lab00 produces hello.c in a walkthrough step.
+        hm = re.match(r"^#{2,3} ((?:Άσκηση|Βήμα) .*)", line)
         if hm:
             named |= set(re.findall(r"([a-z_][a-z0-9_]*\.(?:c|h|txt))", hm.group(1)))
 
     for f in sorted(named - declared):
         add("todo", "framing", path, 1,
-            f"{f} is an exercise deliverable but is not in "
+            f"{f} is produced by a section heading but is not in "
             f"'Αρχεία που θα φτιάξετε'")
     for f in sorted(declared - named):
         add("todo", "framing", path, 1,
-            f"{f} is listed in 'Αρχεία που θα φτιάξετε' but no exercise heading "
+            f"{f} is listed in 'Αρχεία που θα φτιάξετε' but no section heading "
             f"names it")
 
 

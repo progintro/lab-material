@@ -10,7 +10,32 @@ description: >-
 theme: jekyll-theme-primer
 lang: el
 
+# jekyll-readme-index is what makes /labs/lab00/ serve that directory's README.md.
+# It skips any README that has YAML front matter unless told otherwise - and every lab
+# README now carries front matter for the navigation layout, which is what made all
+# eleven lab URLs start returning 404.
+readme_index:
+  with_frontmatter: true
+
+# Declaring `plugins` replaces the set GitHub Pages enables by default, so the defaults
+# are repeated here verbatim. jemoji is the one addition: it renders `:leopard:`-style
+# shortcodes and is NOT enabled by default on GitHub Pages, it has to be asked for.
+plugins:
+  - jekyll-coffeescript
+  - jekyll-default-layout
+  - jekyll-gist
+  - jekyll-github-metadata
+  - jekyll-optional-front-matter
+  - jekyll-paginate
+  - jekyll-readme-index
+  - jekyll-relative-links
+  - jekyll-titles-from-headings
+  - jemoji
+
 # Everything below is build machinery or source material, not part of the website.
+# CONTRIBUTING.md stays out of the site (it is contributor documentation, not course
+# material); the landing page links to it on github.com with an absolute URL, because a
+# relative link to an excluded file 404s here even though it resolves on github.com.
 exclude:
   - Makefile
   - CLAUDE.md
@@ -21,4 +46,5 @@ exclude:
   - "*.pdf"
   - "*.c"
   - "*.txt"
-  - README-out.md
+  - "**/README-out.md"          # build intermediates; gitignored, but excluded defensively
+  - "**/README-out-*.png"

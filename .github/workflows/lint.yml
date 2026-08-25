@@ -40,3 +40,30 @@ jobs:
           name: lab-pdfs
           path: build/*.pdf
           if-no-files-found: error
+
+  pages:
+    name: Build Pages site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Builds with the same github-pages bundle the live site uses, so a config change
+      # that breaks the site fails here instead of after deploy.
+      - uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      # Every lab must be reachable at /labs/labNN/. This regressed once already:
+      # adding YAML front matter to the lab READMEs made jekyll-readme-index skip them,
+      # so all eleven lab URLs started returning 404 while the site still built fine.
+      - name: Assert every lab has an index page
+        run: |
+          missing=0
+          for n in 00 01 02 03 04 05 06 07 08 09 10; do
+            if [ ! -f "_site/labs/lab$n/index.html" ]; then
+              echo "::error::missing _site/labs/lab$n/index.html"
+              missing=1
+            fi
+          done
+          exit $missing

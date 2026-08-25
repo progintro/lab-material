@@ -19,21 +19,26 @@ Any change to a lab must keep both paths working.
 
 ## Build
 
-Requires `make` and `docker` only — nothing is installed locally; all three pipeline
-stages run in containers.
+Requires `make`, `docker` and `python3` — no pandoc or LaTeX is installed locally;
+both rendering stages run in containers.
 
 ```sh
 make                          # build every lab PDF + build/all.pdf
-make -j2                      # same, in parallel; the per-lab targets are independent
+make -j4                      # same, in parallel; the per-lab targets are independent
 make build/lab05.pdf          # single lab (fastest edit/preview loop)
 make labs/lab05/README-out.md # just the mermaid->PNG stage, to debug diagram rendering
 make lint                     # defect linter (see tools/lint.py)
 make toc / make check-toc     # regenerate / verify the per-lab tables of contents
 ```
 
-On Apple silicon the pandoc stage runs under emulation — `ghcr.io/ethan42/pandoctex`
-publishes no arm64 manifest — so a full build takes ~13 minutes serially. CI runs on
-amd64 natively and is unaffected.
+Both images are multi-arch, so nothing runs under emulation any more: a full
+`make -j4` takes about **2 minutes** and produces twelve PDFs. (Until the
+`pandoctex:20260825` bump the pandoc stage had no arm64 manifest and a serial build
+on Apple silicon took ~13 minutes.)
+
+The pandoc image is **pinned to a dated tag** rather than `latest`, because a pandoc
+major version can silently change the generated LaTeX — see the babel note below for
+exactly that happening. `minlag/mermaid-cli` is still unpinned.
 
 If a build dies with `Error 137` (SIGKILL), the Docker daemon is out of resources
 rather than the document being at fault. The `docker run` invocations now pass `--rm`;
@@ -46,6 +51,21 @@ docker ps -a --format '{{.ID}} {{.Image}}' \
   | grep -E 'mermaid-cli|pandoctex|poppler' | awk '{print $1}' | xargs docker rm
 ```
 
+**Greek/babel gotcha (pandoc 3.7).** `-V lang=el` alone no longer builds. pandoc 3.1.3
+emitted `\babelprovide[main,import]{greek}`, which reads babel's `locale/el/babel-el.ini`;
+pandoc 3.7 instead passes `greek` as a *documentclass option*, which makes babel look for
+`greek.ldf` — the `babel-greek` package, which the pandoctex image does not ship. The
+build then dies with `Package babel Error: Unknown option 'greek'`. The fix is split
+across two files: the Makefile passes `-V babel-lang=` to suppress the class option
+while keeping `lang=el` (so `pdflang` metadata survives), and `labs/header.tex` issues
+the `\babelprovide` call itself. Without this the TOC heading reverts to English.
+The cleaner long-term fix is to add `babel-greek` to the image.
+
+**Fontconfig noise:** the pandoc stage runs with `-e HOME=/tmp`. The containers run as
+the invoking uid via `-u`, so `$HOME` is unwritable and fontconfig printed three
+`No writable cache directories` errors on every single invocation. They were harmless
+but buried real diagnostics.
+
 **Encoding gotcha:** the pandoc stage must run with `-e LANG=C.UTF-8`. Without a UTF-8
 locale the container's GHC runtime decodes command-line arguments as Latin-1, so any
 non-ASCII value passed via `-V` (e.g. the Greek lab title used in the running header)
@@ -56,9 +76,10 @@ Pipeline (see `Makefile`), per lab:
 
 1. `minlag/mermaid-cli` — rewrites ` ```mermaid ` fences into PNGs at `--scale 10` and
    emits `README-out.md`. Runs for every lab, including ones with no diagrams.
-2. `ghcr.io/ethan42/pandoctex` — `pandoc README-out.md -f gfm` through `xelatex`, with
-   `labs/header.tex` (just `\usepackage{fullpage}`) and fonts `Linux Libertine O` /
-   `Noto Mono`, which exist only inside that image.
+2. `ghcr.io/ethan42/pandoctex:20260825` (pandoc 3.7) — `pandoc README-out.md -f gfm`
+   through `xelatex`, with `labs/header.tex` (Greek setup, brand palette, running
+   headers, masthead) and fonts `Linux Libertine O` / `Noto Mono`, which exist only
+   inside that image.
 3. `build/all.pdf` is **not** a merge of the per-lab PDFs. `tools/build-all.py`
    concatenates the eleven `README-out.md` files into `build/all.md` — stripping front
    matter and the injected TOC, and rewriting image paths to be repo-root-relative —

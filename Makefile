@@ -35,7 +35,8 @@ $(BUILD_FOLDER)/%.pdf: labs/header.tex labs/%/README-out.md
 		-w /data/labs/$* \
 		-v $(shell pwd):/data \
 		-e LANG=C.UTF-8 \
-		ghcr.io/ethan42/pandoctex \
+		-e HOME=/tmp \
+		ghcr.io/ethan42/pandoctex:20260825 \
 		pandoc README-pdf.md -f gfm -s --toc --toc-depth=2 \
 		-H ../header.tex \
 		-V header-includes='\def\labtitle{$(shell grep -m1 "^# " labs/$*/README.md | sed -e "s/^# //" -e "s/:.*//" -e "s/#//g")}' \
@@ -44,7 +45,7 @@ $(BUILD_FOLDER)/%.pdf: labs/header.tex labs/%/README-out.md
 		-V mainfont="Linux Libertine O" \
 		-V monofont="Noto Mono" \
 		-V fontsize=12pt \
-		-V lang=el \
+		-V lang=el -V babel-lang= \
 		-V colorlinks=true -V linkcolor=ditcharcoal -V urlcolor=ditcyan -V toccolor=ditcharcoal
 	rm -f labs/$*/README-pdf.md
 
@@ -62,7 +63,8 @@ $(ALL): $(BUILD_FOLDER) labs/header.tex labs/cover.tex $(OUTS)
 		-v $(shell pwd):/data \
 		-w /data \
 		-e LANG=C.UTF-8 \
-		ghcr.io/ethan42/pandoctex \
+		-e HOME=/tmp \
+		ghcr.io/ethan42/pandoctex:20260825 \
 		pandoc build/all.md -f gfm -s --toc --toc-depth=2 \
 		-H labs/header.tex \
 		-H labs/cover.tex \
@@ -72,7 +74,7 @@ $(ALL): $(BUILD_FOLDER) labs/header.tex labs/cover.tex $(OUTS)
 		-V mainfont="Linux Libertine O" \
 		-V monofont="Noto Mono" \
 		-V fontsize=12pt \
-		-V lang=el \
+		-V lang=el -V babel-lang= \
 		-V colorlinks=true -V linkcolor=ditcharcoal -V urlcolor=ditcyan -V toccolor=ditcharcoal
 # Regenerate the per-lab tables of contents (and verify them in CI)
 .PHONY: toc check-toc lint

@@ -1,3 +1,18 @@
+% Greek language support.
+%
+% pandoc 3.7 changed how it wires up babel: where 3.1.3 emitted
+% \babelprovide[main,import]{greek} (which reads babel's locale/el/babel-el.ini),
+% it now passes `greek` as a documentclass option, which makes babel look for
+% greek.ldf -- the babel-greek package, which the pandoctex image does not ship.
+% The build dies with "Package babel Error: Unknown option 'greek'".
+%
+% The Makefile therefore passes `-V babel-lang=` to suppress the class option while
+% keeping `lang=el` (so pdflang metadata survives), and we request the language here
+% the way pandoc used to. This is what makes the TOC read "Περιεχόμενα" and figure
+% labels "Σχήμα" rather than English. babel is already loaded by pandoc's template
+% at the point this file is included.
+\babelprovide[main,import]{greek}
+
 \usepackage{fullpage}
 \usepackage{graphicx}
 \usepackage{fancyhdr}

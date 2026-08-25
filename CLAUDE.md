@@ -118,14 +118,21 @@ Writing conventions inside a lab README:
 
 - All prose is in Greek. Match the existing register (second person plural, informal-
   but-instructional) and keep code identifiers, shell commands and C keywords in English.
-- Exercises are `## Άσκηση N: Τίτλος - (filename.c)` — the target source filename the
-  students must produce always appears in the heading.
-- Past exam problems are tagged `(Παλιό Θέμα)` and are usually optional.
-- Several labs carry a running debugging appendix: `## ΠΑΡΑΡΤΗΜΑ: Αποσφαλμάτωση
-  προγραμμάτων (Πράξη Nη)` — the "Πράξη" numbering is a sequence across labs
-  (lab02=1η, lab03=2η, lab07=3η, lab08=4η), so keep it consistent if you add one.
+- **The structural convention lives in `CONTRIBUTING.md` § Οδηγίες συγγραφής and is
+  enforced by `tools/lint.py`.** Read it before restructuring a lab; the summary is
+  that every H2 is one of `## Βήμα N: Τίτλος`, `## Άσκηση N: Τίτλος (file.c)`,
+  `## Για να πάτε παρακάτω (Προαιρετικό)` or `## Παράρτημα: Τίτλος` (always last),
+  and the only badges are `(Παλιό θέμα)`, `(Προχωρημένο)`, `(Προαιρετικό)` in that
+  order.
+- Five labs carry a running debugging appendix: `## Παράρτημα: Αποσφαλμάτωση
+  προγραμμάτων (Πράξη Nη)` — the "Πράξη" numbering is a single sequence across the
+  book (lab02=1η, lab03=2η, lab07=3η, lab08=4η, lab09=5η), and `lint.py` fails if it
+  develops a gap. lab10's appendix is a different genre and carries no Πράξη number.
 - Math uses `$...$` / `$$...$$`; it is rendered by MathJax on Pages and by xelatex in
   the PDF. Both must be satisfied.
+- Short explicit anchors (`<a id="webmail"></a>` above a heading) keep section links
+  terse while the heading itself stays descriptive, and survive a retitling. `lint.py`
+  counts them as valid anchor targets.
 - A recurring source of commits is **PDF fit**: wide tables and long code lines overflow
   the `fullpage` layout. Preview with `make build/labNN.pdf` before assuming Markdown
   that looks fine on GitHub is fine on paper.

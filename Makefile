@@ -25,11 +25,12 @@ labs/%/README-out.md: labs/%/README.md
 
 # Step 2: Generate PDFs from README-out.md using pandoc
 #
-# The injected <!-- toc --> block is stripped here: it carries GitHub-style anchors,
-# which pandoc does not generate, so it would render as a list of dead links. The PDF
-# gets a native, page-numbered contents list from --toc instead.
-$(BUILD_FOLDER)/%.pdf: labs/header.tex labs/%/README-out.md
-	sed '/<!-- toc -->/,/<!-- \/toc -->/d' labs/$*/README-out.md > labs/$*/README-pdf.md
+# tools/pdf-prep.py strips the injected <!-- toc --> block (it carries GitHub-style
+# anchors, which pandoc does not generate, so it would render as a list of dead links -
+# the PDF gets a native, page-numbered contents list from --toc instead) and resolves
+# the short <a id=...> section anchors, which the LaTeX writer would otherwise drop.
+$(BUILD_FOLDER)/%.pdf: labs/header.tex labs/%/README-out.md tools/pdf-prep.py tools/anchors.py
+	python3 tools/pdf-prep.py labs/$*/README-out.md > labs/$*/README-pdf.md
 	docker run --rm \
 		-u $(shell id -u):$(shell id -g) \
 		-w /data/labs/$* \
@@ -56,7 +57,7 @@ $(BUILD_FOLDER)/%.pdf: labs/header.tex labs/%/README-out.md
 # contents list and continuous page numbering possible at all.
 OUTS = $(foreach n, $(shell seq -w 0 10), labs/lab$(n)/README-out.md)
 
-$(ALL): $(BUILD_FOLDER) labs/header.tex labs/cover.tex $(OUTS)
+$(ALL): $(BUILD_FOLDER) labs/header.tex labs/cover.tex tools/anchors.py $(OUTS)
 	python3 tools/build-all.py
 	docker run --rm \
 		-u $(shell id -u):$(shell id -g) \
@@ -65,7 +66,7 @@ $(ALL): $(BUILD_FOLDER) labs/header.tex labs/cover.tex $(OUTS)
 		-e LANG=C.UTF-8 \
 		-e HOME=/tmp \
 		ghcr.io/ethan42/pandoctex:20260825 \
-		pandoc build/all.md -f gfm -s --toc --toc-depth=2 \
+		pandoc build/all.md -f gfm+raw_attribute -s --toc --toc-depth=2 \
 		-H labs/header.tex \
 		-H labs/cover.tex \
 		-V header-includes='\def\labtitle{Συλλογή Εργαστηρίων}' \

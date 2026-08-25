@@ -11,6 +11,25 @@
 \usepackage{titlesec}
 \newcommand{\sectionbreak}{\clearpage}
 
+% tools/build-all.py emits a \part before lab00, lab03 and lab06, splitting the book
+% into its three arcs. Styled to match the cover rather than the article default,
+% which sets a bare "Part I" on its own page.
+% The before-code argument must not contain \par - titlesec reads it as a short
+% argument and the build dies with "Paragraph ended before \ttl@format@ii was
+% complete" - so the rule goes in the after-code slot instead.
+%
+% \partbreak clears the page before the divider and the trailing \clearpage gives it
+% a page of its own; without both, a part title and the lab that follows it share a
+% page and the divider reads as a subheading rather than a section of the book.
+\newcommand{\partbreak}{\clearpage}
+\titleformat{\part}[display]
+  {\centering\normalfont\Huge\bfseries}
+  {}
+  {0pt}
+  {}
+  [\vspace{0.9cm}{\color{ditcyan}\rule{0.6\textwidth}{1.2pt}}\clearpage]
+\titlespacing*{\part}{0pt}{8cm}{0pt}
+
 \AtBeginDocument{%
   \begin{titlepage}
     \centering

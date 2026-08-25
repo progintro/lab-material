@@ -8,17 +8,13 @@ so it runs anywhere `python3` does.
 Severities:
   error  the tree is clean of these today; a new one is a regression -> CI fails
   warn   known outstanding work; reported but not fatal
-  todo   a check written before the sweep that satisfies it; never fatal, not even
-         under --strict, so the spec can land before the prose it describes
 
-`todo` exists because CI already runs --strict. A structural check added as `warn`
-would turn the whole repository red the moment it was written and keep it red until
-the last lab was swept, which would block every unrelated change in between. Landing
-these as `todo` lets the linter be the written spec first and the gate second: the
-count falls lab by lab, and when it hits zero the checks are promoted to `error` and
-this severity is deleted.
+Run `--strict` to promote warnings to errors; CI does.
 
-Run `--strict` to promote warnings to errors.
+The structural checks (section-type, exercise-heading, badge-vocab, appendix-last,
+praxi-sequence, framing, heading-style, fence-lang) were written before the labs
+satisfied them and carried a third, non-fatal `todo` severity while the sweep
+landed. That count reached zero, so they are ordinary errors now.
 """
 
 import argparse
@@ -123,11 +119,11 @@ def check_file(path):
             if not lang:
                 add("warn", "code-fence", path, n, "code block has no language tag")
             elif lang in FENCE_ALIASES:
-                add("todo", "fence-lang", path, n,
+                add("error", "fence-lang", path, n,
                     f"code fence tagged `{lang}`; use `{FENCE_ALIASES[lang]}` "
                     f"(the labs tagged indistinguishable transcripts three ways)")
             elif lang not in FENCE_LANGS:
-                add("todo", "fence-lang", path, n,
+                add("error", "fence-lang", path, n,
                     f"code fence tagged `{lang}`, which is not one of "
                     f"{', '.join(sorted(FENCE_LANGS))}")
             continue
@@ -161,11 +157,11 @@ def check_file(path):
             continue
         bare = txt.rstrip()
         if bare.endswith("."):
-            add("todo", "heading-style", path, n,
+            add("error", "heading-style", path, n,
                 f"heading ends with a period - headings are labels, not sentences: "
                 f"{bare[:60]!r}")
         if len(bare) > HEADING_MAX:
-            add("todo", "heading-style", path, n,
+            add("error", "heading-style", path, n,
                 f"heading is {len(bare)} chars (max {HEADING_MAX}); it belongs in the "
                 f"body, not the contents list: {bare[:60]!r}...")
 
@@ -250,12 +246,12 @@ def parse_badges(path, n, raw):
     parts = [b.strip() for b in raw.split(",")]
     bad = [b for b in parts if b not in BADGES]
     if bad:
-        add("todo", "badge-vocab", path, n,
+        add("error", "badge-vocab", path, n,
             f"unknown badge {bad[0]!r}; allowed: {', '.join(BADGES)}")
         return parts
     order = [BADGES.index(b) for b in parts]
     if order != sorted(order):
-        add("todo", "badge-vocab", path, n,
+        add("error", "badge-vocab", path, n,
             f"badges out of order: {raw!r}; canonical order is {', '.join(BADGES)}")
     return parts
 
@@ -271,7 +267,7 @@ def check_structure(path, headings):
     for i, (n, txt) in enumerate(h2):
         if H2_APPENDIX.match(txt):
             if appendix_at is not None:
-                add("todo", "section-type", path, n,
+                add("error", "section-type", path, n,
                     "a lab has at most one appendix")
             appendix_at = i
             continue
@@ -279,13 +275,13 @@ def check_structure(path, headings):
         # Anything after the appendix breaks the "appendix is last" rule. lab07 and
         # lab08 both did this, for different reasons and with different fixes.
         if appendix_at is not None:
-            add("todo", "appendix-last", path, n,
+            add("error", "appendix-last", path, n,
                 f"{txt[:40]!r} follows the appendix; the appendix is always the "
                 f"last H2 (an exercise that depends on it belongs inside it as an H3)")
 
         if H2_STEP.match(txt):
             if seen_exercise:
-                add("todo", "section-type", path, n,
+                add("error", "section-type", path, n,
                     f"Βήμα after an Άσκηση: {txt[:40]!r}; walkthrough steps come first")
             continue
         if H2_ONWARD.match(txt):
@@ -297,7 +293,7 @@ def check_structure(path, headings):
             parse_badges(path, n, m.group(2))
             continue
 
-        add("todo", "section-type", path, n,
+        add("error", "section-type", path, n,
             f"H2 {txt[:50]!r} is not one of: 'Βήμα N: …', 'Άσκηση N: … (file.c)', "
             f"'Για να πάτε παρακάτω (Προαιρετικό)', 'Παράρτημα: …'")
 
@@ -308,7 +304,7 @@ def check_structure(path, headings):
             if level == 3 and n > start and txt.startswith("Άσκηση"):
                 m = H3_EXERCISE.match(txt)
                 if not m:
-                    add("todo", "exercise-heading", path, n,
+                    add("error", "exercise-heading", path, n,
                         f"appendix exercise {txt[:40]!r} has no number; it continues "
                         f"the lab's own series")
                 else:
@@ -316,7 +312,7 @@ def check_structure(path, headings):
 
     nums = [num for _, num in exercise_numbers]
     if nums and sorted(nums) != list(range(1, len(nums) + 1)):
-        add("todo", "exercise-heading", path, exercise_numbers[0][0],
+        add("error", "exercise-heading", path, exercise_numbers[0][0],
             f"exercise numbers are {nums}; they must run 1..{len(nums)} with no gaps "
             f"or repeats")
     return appendix_at is not None
@@ -337,11 +333,11 @@ def check_framing(path):
     for k in keys:
         i = head.find(k)
         if i < 0:
-            add("todo", "framing", path, 1, f"opening blockquote is missing {k}")
+            add("error", "framing", path, 1, f"opening blockquote is missing {k}")
         pos.append(i)
     present = [i for i in pos if i >= 0]
     if present != sorted(present):
-        add("todo", "framing", path, 1,
+        add("error", "framing", path, 1,
             f"opening blockquote keys are out of order; expected {' then '.join(keys)}")
 
     m = re.search(r"\*\*Αρχεία που θα φτιάξετε:\*\*(.*)", head)
@@ -357,11 +353,11 @@ def check_framing(path):
             named |= set(re.findall(r"([a-z_][a-z0-9_]*\.(?:c|h|txt))", hm.group(1)))
 
     for f in sorted(named - declared):
-        add("todo", "framing", path, 1,
+        add("error", "framing", path, 1,
             f"{f} is produced by a section heading but is not in "
             f"'Αρχεία που θα φτιάξετε'")
     for f in sorted(declared - named):
-        add("todo", "framing", path, 1,
+        add("error", "framing", path, 1,
             f"{f} is listed in 'Αρχεία που θα φτιάξετε' but no section heading "
             f"names it")
 
@@ -375,14 +371,14 @@ def check_praxi(all_headings):
             if level == 2 and "Αποσφαλμάτωση προγραμμάτων" in txt:
                 m = PRAXI.search(txt)
                 if not m:
-                    add("todo", "praxi-sequence", path, n,
+                    add("error", "praxi-sequence", path, n,
                         "debugging appendix is missing its (Πράξη Nη) number")
                 else:
                     found.append((path, n, int(m.group(1))))
     nums = [k for _, _, k in found]
     if nums != list(range(1, len(nums) + 1)):
         for path, n, k in found:
-            add("todo", "praxi-sequence", path, n,
+            add("error", "praxi-sequence", path, n,
                 f"(Πράξη {k}η) - the series across the book reads {nums}; it must "
                 f"run 1..{len(nums)} in lab order")
 
@@ -407,20 +403,17 @@ def main():
     check_praxi(all_headings)
 
     counts = defaultdict(int)
-    for sev in ("error", "warn", "todo"):
+    for sev in ("error", "warn"):
         for check, path, line, msg in sorted(findings[sev], key=lambda f: (f[1], f[2])):
             print(f"{path}:{line}: {sev}: [{check}] {msg}")
             counts[check] += 1
 
     print()
     print(f"checked {len(paths)} files: "
-          f"{len(findings['error'])} errors, {len(findings['warn'])} warnings, "
-          f"{len(findings['todo'])} todo")
+          f"{len(findings['error'])} errors, {len(findings['warn'])} warnings")
     if counts:
         print("by check: " + ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
 
-    # `todo` is deliberately excluded: it marks checks that describe the convention
-    # before the prose satisfies it. See the module docstring.
     failed = len(findings["error"]) or (args.strict and len(findings["warn"]))
     return 1 if failed else 0
 

@@ -20,7 +20,11 @@ jobs:
         # --strict: the tree is at zero errors and zero warnings, so every check is
         # blocking. Missing image alt text, untagged code fences, leftover .doc
         # escapes, homoglyphs, dead anchors, heading/body filename mismatches and
-        # cross-lab filename collisions all fail the build if reintroduced.
+        # cross-lab filename collisions all fail the build if reintroduced, as do
+        # the structural checks documented in CONTRIBUTING.md under "Οδηγίες
+        # συγγραφής": section types, exercise heading grammar and numbering, the
+        # badge vocabulary, appendix placement, the Πράξη series, the opening
+        # blockquote and its deliverables list, heading style and fence tags.
         run: python3 tools/lint.py --strict
 
   build:

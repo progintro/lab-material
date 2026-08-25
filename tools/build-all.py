@@ -31,6 +31,20 @@ import anchors
 LABS = [f"lab{n:02d}" for n in range(11)]
 OUT = "build/all.md"
 
+# The eleven labs are three arcs, not eleven equal chapters, and until this was
+# emitted the shape of the course was invisible in the book. The divider is raw LaTeX
+# in a ```{=latex} block, which is why the all.pdf recipe reads gfm+raw_attribute; the
+# lab sources stay plain Markdown, so GitHub and the Pages site are unaffected.
+PARTS = {
+    "lab00": "Μέρος Α - Τα εργαλεία",
+    "lab03": "Μέρος Β - Τα θεμέλια της C",
+    "lab06": "Μέρος Γ - Μνήμη, δομές και αρχεία",
+}
+
+
+def divider(title):
+    return "```{=latex}\n\\part{%s}\n```\n" % title
+
 
 def prepare(lab):
     path = f"labs/{lab}/README-out.md"
@@ -59,7 +73,11 @@ def prepare(lab):
 
 def main():
     os.makedirs("build", exist_ok=True)
-    parts = [prepare(lab) for lab in LABS]
+    parts = []
+    for lab in LABS:
+        if lab in PARTS:
+            parts.append(divider(PARTS[lab]))
+        parts.append(prepare(lab))
     io.open(OUT, "w", encoding="utf-8").write("\n\n".join(parts))
 
     body = io.open(OUT, encoding="utf-8").read()

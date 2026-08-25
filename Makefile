@@ -66,7 +66,7 @@ $(ALL): $(BUILD_FOLDER) labs/header.tex labs/cover.tex tools/anchors.py $(OUTS)
 		-e LANG=C.UTF-8 \
 		-e HOME=/tmp \
 		ghcr.io/ethan42/pandoctex:20260825 \
-		pandoc build/all.md -f gfm -s --toc --toc-depth=2 \
+		pandoc build/all.md -f gfm+raw_attribute -s --toc --toc-depth=2 \
 		-H labs/header.tex \
 		-H labs/cover.tex \
 		-V header-includes='\def\labtitle{Συλλογή Εργαστηρίων}' \

@@ -18,7 +18,7 @@
 Στα τρία πρώτα εργαστήρια στήνουμε τα εργαλεία: λογαριασμό, γραμμή εντολών, git και
 μεταγλωττιστή. Από το #3 και μετά γράφουμε C.
 
-<table>
+<table class="lab-index">
   <thead>
     <tr>
       <th>Μέρος</th>
@@ -29,60 +29,60 @@
   </thead>
   <tbody>
     <tr>
-      <td rowspan="3"><strong>Α</strong><br>Τα εργαλεία</td>
-      <td>0</td>
+      <td rowspan="3" class="part"><span>Α: Εργαλεία</span></td>
+      <td class="num">0</td>
       <td><a href="labs/lab00/">Καλημέρα Κόσμε! Εισαγωγή και Χρήσιμες Εφαρμογές</a></td>
       <td>webmail, Piazza, λογαριασμός Linux, ssh, shell, editors, Hello World</td>
     </tr>
     <tr>
-      <td>1</td>
+      <td class="num">1</td>
       <td><a href="labs/lab01/">Unix και Git</a></td>
       <td>εντολές Unix, δικαιώματα, ανακατεύθυνση, σωληνώσεις, git, GitHub</td>
     </tr>
     <tr>
-      <td>2</td>
+      <td class="num">2</td>
       <td><a href="labs/lab02/">Προγραμματιστικά Περιβάλλοντα (Editors / IDEs)</a></td>
       <td>VS Code, scp / WinSCP, μεταγλώττιση, <code>scanf</code></td>
     </tr>
     <tr>
-      <td rowspan="3"><strong>Β</strong><br>Τα θεμέλια της C</td>
-      <td>3</td>
+      <td rowspan="3" class="part"><span>Β: Θεμέλια της C</span></td>
+      <td class="num">3</td>
       <td><a href="labs/lab03/">Μεταβλητές, Δομές Ελέγχου και Επανάληψης</a></td>
       <td>τύποι, <code>while</code> / <code>for</code> / <code>do…while</code>, <code>if…else</code>, σειρές</td>
     </tr>
     <tr>
-      <td>4</td>
+      <td class="num">4</td>
       <td><a href="labs/lab04/">Είσοδος και Έξοδος Χαρακτήρων</a></td>
       <td><code>getchar</code>, <code>putchar</code>, ASCII, κωδικοποίηση</td>
     </tr>
     <tr>
-      <td>5</td>
+      <td class="num">5</td>
       <td><a href="labs/lab05/">Συναρτήσεις και Αναδρομή</a></td>
       <td>συναρτήσεις, αναδρομή, Collatz, Fibonacci</td>
     </tr>
     <tr>
-      <td rowspan="5"><strong>Γ</strong><br>Μνήμη, δομές και αρχεία</td>
-      <td>6</td>
+      <td rowspan="5" class="part"><span>Γ: Μνήμη και δομές</span></td>
+      <td class="num">6</td>
       <td><a href="labs/lab06/">Δείκτες και Πίνακες</a></td>
       <td>δείκτες, αριθμητική δεικτών, πίνακες, κόσκινο Ερατοσθένη</td>
     </tr>
     <tr>
-      <td>7</td>
+      <td class="num">7</td>
       <td><a href="labs/lab07/">Πολυδιάστατοι Πίνακες και Δυναμική Δέσμευση Μνήμης</a></td>
       <td>2Δ πίνακες, <code>malloc</code> / <code>free</code></td>
     </tr>
     <tr>
-      <td>8</td>
+      <td class="num">8</td>
       <td><a href="labs/lab08/">Συμβολοσειρές και Ορίσματα Γραμμής Εντολών</a></td>
       <td><code>string.h</code>, <code>argc</code> / <code>argv</code></td>
     </tr>
     <tr>
-      <td>9</td>
+      <td class="num">9</td>
       <td><a href="labs/lab09/">Δομές και Αυτοαναφορικές Δομές</a></td>
       <td><code>struct</code>, συνδεδεμένες λίστες, δυαδικά δένδρα</td>
     </tr>
     <tr>
-      <td>10</td>
+      <td class="num">10</td>
       <td><a href="labs/lab10/">Είσοδος και Έξοδος με Αρχεία</a></td>
       <td>ρεύματα, αρχεία κειμένου και δυαδικά, πολλαπλά αρχεία και <code>make</code></td>
     </tr>

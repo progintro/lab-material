@@ -52,7 +52,29 @@ MathJax = {
   .lab-nav a { color: var(--dit-cyan); text-decoration: none; font-weight: 600; }
   .lab-nav a:hover { text-decoration: underline; }
 
-  .lab-index td:first-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  /* The landing-page lab table. Its first column is a part label spanning three or
+     five rows; rotating it keeps that column one line of text wide instead of a
+     wrapped two-line block.
+
+     This is Pages-only on purpose. GitHub strips class and style attributes when it
+     renders README.md, so rotation is not available there under any spelling - the
+     same markup falls back to the label set horizontally on one line, which is why
+     the labels are kept short. */
+  .lab-index td.part {
+    width: 1%;
+    padding: 4px 2px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .lab-index td.part span {
+    display: inline-block;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    font-weight: 600;
+    color: var(--dit-charcoal);
+  }
+  .lab-index td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   .crest-row {
     display: flex;

@@ -8,9 +8,11 @@
 
 1. `make`
 2. `docker`
+3. `python3` (μόνο η standard library)
 
-Δεν χρειάζεται τοπική εγκατάσταση pandoc ή LaTeX — και τα τρία στάδια του build
-τρέχουν μέσα σε containers.
+Δεν χρειάζεται τοπική εγκατάσταση pandoc ή LaTeX — τα δύο στάδια του build που
+τα χρειάζονται (mermaid και pandoc) τρέχουν μέσα σε containers. Τα βοηθητικά
+scripts του `tools/` τρέχουν τοπικά με `python3`.
 
 ## Build
 
@@ -18,11 +20,19 @@
 make                          # όλα τα PDF των εργαστηρίων + build/all.pdf
 make build/lab05.pdf          # ένα μόνο εργαστήριο (γρήγορος κύκλος δοκιμών)
 make labs/lab05/README-out.md # μόνο το στάδιο mermaid → PNG
+make lint                     # έλεγχος δομής και συχνών λαθών (tools/lint.py)
+make toc                      # ξαναγράφει τα περιεχόμενα κάθε εργαστηρίου
+make check-toc                # ελέγχει ότι τα περιεχόμενα είναι ενημερωμένα
+make clean                    # σβήνει το build/ και τα ενδιάμεσα αρχεία
 ```
+
+Το CI τρέχει σε κάθε pull request `make check-toc`, `tools/lint.py --strict`,
+ολόκληρο το build και το build της ιστοσελίδας. Αν αλλάξετε επικεφαλίδες,
+τρέξτε `make toc` πριν το commit.
 
 Τα παραγόμενα PDF βρίσκονται στον κατάλογο `build/`.
 
-Τα ενδιάμεσα αρχεία `README-out.md` και `README-out-*.png`, όπως και ο κατάλογος
+Τα ενδιάμεσα αρχεία `README-out.md`, `README-out*.png` και `README-pdf.md`, όπως και ο κατάλογος
 `build/`, είναι στο `.gitignore` και δεν πρέπει να μπαίνουν σε commit.
 
 ## Πώς δουλεύει το build

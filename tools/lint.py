@@ -213,21 +213,41 @@ def check_homoglyphs(path, n, line):
             f"did you mean Greek {GREEK_HOMOGLYPHS[LATIN_HOMOGLYPHS.index(ch)]!r}?")
 
 
+def section_body(lines, headings, k):
+    """The text under headings[k], up to the next heading of the same or a higher
+    level. The heading line itself is excluded, and so is the injected TOC block,
+    which repeats every heading and would otherwise satisfy any check on its own."""
+    n, level, _ = headings[k]
+    end = len(lines)
+    for m, lvl, _ in headings[k + 1:]:
+        if lvl <= level:
+            end = m - 1
+            break
+    body = "\n".join(lines[n:end])
+    return re.sub(r"<!-- toc -->.*?<!-- /toc -->", "", body, flags=re.S)
+
+
 def check_exercise_files(all_headings):
     """Exercise headings name the .c file the student must produce. Two bugs this
     catches: a heading naming one file while the body tells you to write another
     (filediff.c vs compare.c), and the same filename reused by two different labs."""
     owner = {}
     for path, headings in all_headings.items():
-        body = open(path, encoding="utf-8").read()
-        for n, level, txt in headings:
+        lines = open(path, encoding="utf-8").read().split("\n")
+        for k, (n, level, txt) in enumerate(headings):
             if not txt.startswith("Άσκηση"):
                 continue
-            names = re.findall(r"([A-Za-z_][A-Za-z0-9_]*\.c)", txt)
+            body = section_body(lines, headings, k)
+            mentioned = set(re.findall(r"\b([A-Za-z_][A-Za-z0-9_]*\.c)\b", body))
+            names = re.findall(r"([a-z_][a-z0-9_]*\.c)", txt)
             for name in names:
-                if name not in body.split("\n", 1)[1]:
+                # A section need not repeat its filename; the defect is one that
+                # names some other .c file and never the one in its heading.
+                others = sorted(mentioned - set(names))
+                if name not in mentioned and others:
                     add("error", "filename", path, n,
-                        f"heading names {name} but it never appears in the body")
+                        f"heading names {name} but its section names "
+                        f"{', '.join(others)} instead")
                 if name in owner and owner[name] != path:
                     add("warn", "filename", path, n,
                         f"{name} is also used by {owner[name]}")
@@ -386,7 +406,7 @@ def check_praxi(all_headings):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true",
-                    help="treat warnings as errors (enable after the NORMALIZE sweep)")
+                    help="treat warnings as errors (CI runs with this)")
     args = ap.parse_args()
 
     paths = sorted(glob.glob(LABS))

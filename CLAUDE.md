@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Lab material for the "Introduction to Programming" (C) course at the University of Athens.
 It is **content, not software**: the deliverable is a set of PDF lab handouts built from
-Greek-language Markdown. There is no application, no test suite, and no linter.
+Greek-language Markdown. There is no application and no test suite; `tools/lint.py` is the only automated check.
 
 The same Markdown is consumed two ways:
 
@@ -29,6 +29,7 @@ make build/lab05.pdf          # single lab (fastest edit/preview loop)
 make labs/lab05/README-out.md # just the mermaid->PNG stage, to debug diagram rendering
 make lint                     # defect linter (see tools/lint.py)
 make toc / make check-toc     # regenerate / verify the per-lab tables of contents
+make clean                    # remove build/ and the per-lab intermediates
 ```
 
 Both images are multi-arch, so nothing runs under emulation any more: a full
@@ -38,7 +39,8 @@ on Apple silicon took ~13 minutes.)
 
 The pandoc image is **pinned to a dated tag** rather than `latest`, because a pandoc
 major version can silently change the generated LaTeX — see the babel note below for
-exactly that happening. `minlag/mermaid-cli` is still unpinned.
+exactly that happening. `minlag/mermaid-cli` is pinned the same way (`MERMAID_TAG` in the
+Makefile, matching progintro/study) — its 12.x major landed in September 2026.
 
 If a build dies with `Error 137` (SIGKILL), the Docker daemon is out of resources
 rather than the document being at fault. The `docker run` invocations now pass `--rm`;
@@ -48,7 +50,7 @@ strays with:
 
 ```sh
 docker ps -a --format '{{.ID}} {{.Image}}' \
-  | grep -E 'mermaid-cli|pandoctex|poppler' | awk '{print $1}' | xargs docker rm
+  | grep -E 'mermaid-cli|pandoctex' | awk '{print $1}' | xargs docker rm
 ```
 
 **Greek/babel gotcha (pandoc 3.7).** `-V lang=el` alone no longer builds. pandoc 3.1.3
@@ -74,7 +76,7 @@ unaffected — this only bites values passed on the command line.
 
 Pipeline (see `Makefile`), per lab:
 
-1. `minlag/mermaid-cli` — rewrites ` ```mermaid ` fences into PNGs at `--scale 10` and
+1. `minlag/mermaid-cli:$(MERMAID_TAG)` — rewrites ` ```mermaid ` fences into PNGs at `--scale 10` and
    emits `README-out.md`. Runs for every lab, including ones with no diagrams.
 2. `ghcr.io/ethan42/pandoctex:20260825` (pandoc 3.7) — `pandoc README-out.md -f gfm`
    through `xelatex`, with `labs/header.tex` (Greek setup, brand palette, running
@@ -93,11 +95,11 @@ Pipeline (see `Makefile`), per lab:
 
 ## Layout and conventions
 
-- `labs/labNN/README.md` — the source of truth. Currently **lab00–lab10**. The Makefile
-  derives its target list from `$(shell seq -w 0 10)`, so adding a lab11 means editing
-  that range too.
+- `labs/labNN/README.md` — the source of truth. Currently **lab00–lab10**. The lab range is
+  hard-coded in four places, all of which must change to add a lab11: the two
+  `seq -w 0 10` calls in the `Makefile` (`PDFs` and `OUTS`), `LABS = … range(11)` in
+  `tools/build-all.py`, and the `for n in 00 … 10` loop in `.github/workflows/lint.yml`.
 - `labs/labNN/img/media/*.png` — images, referenced as `./img/media/imageN.png`.
-  `lab03` is the exception: `./img/imageN.png`.
 - `docs/lab01.doc` … `docs/lab11.doc` — the legacy Word originals the Markdown was
   converted from. Historical reference only; nothing in the build reads them, and they
   are *not* kept in sync with `labs/`. **The numbering is offset by one**: `docs/labNN.doc`
@@ -105,8 +107,9 @@ Pipeline (see `Makefile`), per lab:
   Two exceptions worth knowing: `docs/lab05.doc` and `docs/lab06.doc` map to `labs/lab05`
   and `labs/lab04` respectively (char I/O was moved *before* functions/recursion), and
   `docs/lab05.doc` additionally covers scope/storage of variables plus an appendix on
-  splitting a program across multiple `.c`/`.h` files — material with no counterpart
-  anywhere in `labs/`.
+  splitting a program across multiple `.c`/`.h` files. The multi-file material now lives
+  in lab10's appendix (`## Παράρτημα: Οργάνωση προγράμματος σε πολλαπλά αρχεία`); the
+  scope/storage material has no counterpart in `labs/`.
 - `labs/header.tex` — shared LaTeX preamble: `fvextra` line-breaking for code blocks
   (without it long terminal transcripts run off the page and get clipped), the brand
   palette, the `fancyhdr` running header/footer, and the `\AtBeginDocument` masthead
@@ -137,24 +140,15 @@ Writing conventions inside a lab README:
   the `fullpage` layout. Preview with `make build/labNN.pdf` before assuming Markdown
   that looks fine on GitHub is fine on paper.
 
-## Root-level `*.c` files
-
-The C files at the repo root (`prime.c`, `collatz.c`, `maxpath.c`, `fib.c`, `encode.c`,
-`decode.c`, `printchar.c`, `example1.c`, …) plus their compiled binaries and `pile.txt`
-are **untracked lecture/demo scratch** — worked solutions and live-coding leftovers, not
-part of the build. They are not gitignored, so they show up in `git status`; do not stage
-them unless explicitly asked. Compile ad hoc:
-
-```sh
-gcc -o prime prime.c && ./prime 10001
-gcc -o circularprime circularprime.c -lm
-```
-
 ## CI
 
-- `.github/workflows/publish.yml` — on GitHub **release published** or manual dispatch:
-  auto-increments the patch component of the latest tag, pushes the new tag, runs `make`,
-  and uploads every `build/*.pdf` as release assets via `hub`. Releases are the
-  distribution channel for the handouts.
+- `.github/workflows/lint.yml` — on every pull request and push to `main`: `make
+  check-toc`, `tools/lint.py --strict`, a full `make` (PDFs uploaded as an artifact) and
+  a Jekyll build that asserts every `/labs/labNN/` page exists.
+- `.github/workflows/publish.yml` — runs `make` and attaches every `build/*.pdf` to a
+  release. When a maintainer publishes a release, the PDFs go on *that* release. On
+  manual dispatch it bumps the patch of the highest `x.y.z` tag and creates the release
+  (and its tag) with `gh release create`, only after the build succeeds. Releases are
+  the distribution channel for the handouts.
 - `.github/workflows/kaizen.yml` — manual-dispatch-only AI review pass (`ethan42/kaizen`);
   not part of the normal build.

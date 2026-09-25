@@ -2,12 +2,16 @@
 
 BUILD_FOLDER ?= build
 
+# Pinned like the pandoc image below: a mermaid-cli major release can change the
+# rendered diagrams or its command-line flags. progintro/study pins the same tag.
+MERMAID_TAG = 11.17.0
+
 PDFs = $(foreach n, $(shell seq -w 0 10), lab$(n).pdf)
 
 TARGETS = $(PDFs:%=$(BUILD_FOLDER)/%)
 ALL = $(BUILD_FOLDER)/all.pdf
 
-all: $(BUILD_FOLDER) $(TARGETS) $(ALL)
+all: $(TARGETS) $(ALL)
 
 # Step 0: Create build folder
 $(BUILD_FOLDER):
@@ -17,9 +21,9 @@ $(BUILD_FOLDER):
 labs/%/README-out.md: labs/%/README.md
 	docker run --rm \
 		-u $(shell id -u):$(shell id -g) \
-		-v $(shell pwd):/data \
+		-v $(CURDIR):/data \
 		-w /data/labs/$* \
-		minlag/mermaid-cli \
+		minlag/mermaid-cli:$(MERMAID_TAG) \
 		-i README.md -o README-out.md --outputFormat png \
 		--scale 10
 
@@ -29,12 +33,12 @@ labs/%/README-out.md: labs/%/README.md
 # anchors, which pandoc does not generate, so it would render as a list of dead links -
 # the PDF gets a native, page-numbered contents list from --toc instead) and resolves
 # the short <a id=...> section anchors, which the LaTeX writer would otherwise drop.
-$(BUILD_FOLDER)/%.pdf: labs/header.tex labs/%/README-out.md tools/pdf-prep.py tools/anchors.py
-	python3 tools/pdf-prep.py labs/$*/README-out.md > labs/$*/README-pdf.md
+$(BUILD_FOLDER)/%.pdf: labs/header.tex labs/%/README-out.md tools/pdf-prep.py tools/anchors.py | $(BUILD_FOLDER)
+	python3 -B tools/pdf-prep.py labs/$*/README-out.md > labs/$*/README-pdf.md
 	docker run --rm \
 		-u $(shell id -u):$(shell id -g) \
 		-w /data/labs/$* \
-		-v $(shell pwd):/data \
+		-v $(CURDIR):/data \
 		-e LANG=C.UTF-8 \
 		-e HOME=/tmp \
 		ghcr.io/ethan42/pandoctex:20260825 \
@@ -57,11 +61,11 @@ $(BUILD_FOLDER)/%.pdf: labs/header.tex labs/%/README-out.md tools/pdf-prep.py to
 # contents list and continuous page numbering possible at all.
 OUTS = $(foreach n, $(shell seq -w 0 10), labs/lab$(n)/README-out.md)
 
-$(ALL): $(BUILD_FOLDER) labs/header.tex labs/cover.tex tools/anchors.py $(OUTS)
-	python3 tools/build-all.py
+$(ALL): labs/header.tex labs/cover.tex tools/anchors.py tools/build-all.py $(OUTS) | $(BUILD_FOLDER)
+	python3 -B tools/build-all.py
 	docker run --rm \
 		-u $(shell id -u):$(shell id -g) \
-		-v $(shell pwd):/data \
+		-v $(CURDIR):/data \
 		-w /data \
 		-e LANG=C.UTF-8 \
 		-e HOME=/tmp \
@@ -77,13 +81,18 @@ $(ALL): $(BUILD_FOLDER) labs/header.tex labs/cover.tex tools/anchors.py $(OUTS)
 		-V fontsize=12pt \
 		-V lang=el -V babel-lang= \
 		-V colorlinks=true -V linkcolor=ditcharcoal -V urlcolor=ditcyan -V toccolor=ditcharcoal
+
 # Regenerate the per-lab tables of contents (and verify them in CI)
-.PHONY: toc check-toc lint
+.PHONY: all clean toc check-toc lint
 toc:
-	python3 tools/gen-toc.py
+	python3 -B tools/gen-toc.py
 
 check-toc:
-	python3 tools/gen-toc.py --check
+	python3 -B tools/gen-toc.py --check
 
 lint:
-	python3 tools/lint.py
+	python3 -B tools/lint.py
+
+# Remove the build folder and the per-lab intermediates (all gitignored).
+clean:
+	rm -rf $(BUILD_FOLDER) labs/*/README-out.md labs/*/README-out*.png labs/*/README-pdf.md

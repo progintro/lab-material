@@ -1,9 +1,16 @@
 name: Publish lab PDFs
 
+# Two ways in:
+#   - publishing a release by hand: build and attach the PDFs to *that* release;
+#   - manual dispatch: bump the patch of the highest version tag and create a
+#     release for it.
 on:
   release:
     types: [published]
   workflow_dispatch:
+
+# Two runs at once would compute the same next version.
+concurrency: publish
 
 jobs:
   convert-markdown-to-pdf:
@@ -19,40 +26,33 @@ jobs:
         fetch-depth: 0
         fetch-tags: true
 
-    - name: Get latest tag
-      id: get_tag
-      run: |
-        latest_tag=$(git describe --tags "$(git rev-list --tags --max-count=1)" 2>/dev/null || true)
-        echo "Latest tag: ${latest_tag:-<none>}"
-        echo "tag=$latest_tag" >> "$GITHUB_OUTPUT"
-
-    - name: Calculate new version
-      id: new_version
-      run: |
-        latest_version="${{ steps.get_tag.outputs.tag }}"
-        if [ -z "$latest_version" ]; then
-          new_version="0.1.0"
-        else
-          IFS='.' read -r major minor patch <<< "$latest_version"
-          patch=$((patch + 1))
-          new_version="$major.$minor.$patch"
-        fi
-        echo "New version: $new_version"
-        echo "version=$new_version" >> "$GITHUB_OUTPUT"
-
-    - name: Create new tag
-      run: |
-        git tag "${{ steps.new_version.outputs.version }}"
-        git push origin "${{ steps.new_version.outputs.version }}"
-
     - name: Build PDFs
       run: make
 
-    - name: Upload PDFs to GitHub Releases
-      run: |
-        tag_name="${{ steps.new_version.outputs.version }}"
-        gh release create "$tag_name" build/*.pdf \
-          --title "$tag_name" \
-          --notes "Εργαστηριακό υλικό — έκδοση $tag_name"
+    - name: Attach PDFs to the published release
+      if: github.event_name == 'release'
+      run: gh release upload "${{ github.event.release.tag_name }}" build/*.pdf --clobber
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create the next release
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        # Highest x.y.z tag by version order; `git describe` picked the most recently
+        # committed tag instead, and choked on non-version tags such as `alpha`.
+        latest=$(git tag -l '[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -n1)
+        if [ -z "$latest" ]; then
+          version="0.1.0"
+        else
+          IFS='.' read -r major minor patch <<< "$latest"
+          version="$major.$minor.$((patch + 1))"
+        fi
+        echo "Latest tag: ${latest:-<none>}, new version: $version"
+        # The tag is created with the release, after a successful build, so a failed
+        # build no longer leaves an orphan tag behind.
+        gh release create "$version" build/*.pdf \
+          --target "$GITHUB_SHA" \
+          --title "$version" \
+          --notes "Εργαστηριακό υλικό — έκδοση $version"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

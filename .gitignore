@@ -1,7 +1,9 @@
 README-out.md
-build
+/build/
 README-out*.png
 _site
 .jekyll-cache
 README-pdf.md
 all.md
+__pycache__/
+*.pyc

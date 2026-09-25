@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-job:
+  review:
     runs-on: ubuntu-latest
 
     permissions:
@@ -13,10 +13,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Run kaizen
-      uses: ethan42/kaizen@main
+      uses: ethan42/kaizen@0ba07f84c844326381eb67e90b7c5f77bb4fc2e6 # main as of 2026-09-25
       with:
         openai-api-key: ${{ secrets.OPENAI_API_KEY }}
         github-token: ${{ secrets.GITHUB_TOKEN }}

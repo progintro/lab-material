@@ -73,7 +73,7 @@
     </tr>
     <tr>
       <td class="num">8</td>
-      <td><a href="labs/lab08/">Συμβολοσειρές και Ορίσματα Γραμμής Εντολών</a></td>
+      <td><a href="labs/lab08/">Συμβολοσειρές και Ορίσματα Γραμμής Εντολής</a></td>
       <td><code>string.h</code>, <code>argc</code> / <code>argv</code></td>
     </tr>
     <tr>

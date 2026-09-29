@@ -17,7 +17,7 @@ next: lab02
 > - Να μεταγλωττίζετε χωριστά και να συνδέετε αντικειμενικά αρχεία με τον `gcc`.
 > - Να δημιουργείτε ένα repository στο GitHub και να ανεβάζετε τις αλλαγές σας με git.
 >
-> **Προαπαιτούμενα:** [Εργαστήριο #0](https://progintro.github.io/lab-material/labs/lab00/) - ενεργοποιημένος λογαριασμός και σύνδεση με ssh.
+> **Προαπαιτούμενα:** [Εργαστήριο #0](https://progintro.github.io/lab-material/labs/lab00/) - ενεργοποιημένος λογαριασμός, σύνδεση με ssh και λογαριασμός GitHub με ρυθμισμένο κλειδί ssh.
 >
 > **Αρχεία που θα φτιάξετε:** `info.txt`
 
@@ -33,11 +33,6 @@ next: lab02
 - [Βήμα 4: Δικαιώματα προστασίας](#βήμα-4-δικαιώματα-προστασίας)
 - [Βήμα 5: Αναζήτηση, ανακατεύθυνση και σωληνώσεις](#βήμα-5-αναζήτηση-ανακατεύθυνση-και-σωληνώσεις)
 - [Βήμα 6: Git και GitHub](#βήμα-6-git-και-github)
-  - [6.1 Δημιουργία λογαριασμού στο GitHub](#61-δημιουργία-λογαριασμού-στο-github)
-  - [6.2 Δημιουργία προσωπικού κλειδιού](#62-δημιουργία-προσωπικού-κλειδιού)
-  - [6.3 Εκτύπωση προσωπικού κλειδιού](#63-εκτύπωση-προσωπικού-κλειδιού)
-  - [6.4 Προσθήκη προσωπικού κλειδιού στο GitHub](#64-προσθήκη-προσωπικού-κλειδιού-στο-github)
-  - [6.5 Ρύθμιση των παραμέτρων του git](#65-ρύθμιση-των-παραμέτρων-του-git)
 - [Άσκηση 1: Το πρώτο σας repository (info.txt)](#άσκηση-1-το-πρώτο-σας-repository-infotxt)
 - [Για να πάτε παρακάτω (Προαιρετικό)](#για-να-πάτε-παρακάτω-προαιρετικό)
 
@@ -343,110 +338,26 @@ cp ~iphw/samples/mymain.c mymain.c
 
 Για τις ανάγκες του μαθήματος, ένα από τα εργαλεία που θα χρησιμοποιήσουμε είναι το git καθώς και η cloud based υπηρεσία GitHub. To git αποτελεί ένα εργαλείο που μας βοηθάει στη διαχείριση των εκδόσεων του πηγαίου κώδικα των προγραμμάτων που γράφουμε. Η υπηρεσία GitHub αποτελεί ένα on-line αποθετήριο για το git που είναι ελεύθερα διαθέσιμο.
 
-### 6.1 Δημιουργία λογαριασμού στο GitHub
-
-Για να αποκτήσουμε λογαριασμό στην υπηρεσία GitHub (αν δεν έχουμε ήδη) θα πρέπει να πραγματοποιήσουμε εγγραφή. Ανοίγουμε έναν browser και πληκτρολογούμε τη διεύθυνση: <https://github.com/join>
-
-Στη φόρμα που θα εμφανιστεί συμπληρώνουμε τα στοιχεία μας, λύνουμε το πρόβλημα επιβεβαίωσης που θα μας ζητηθεί και πατάμε Create account.
-
-![Η φόρμα δημιουργίας λογαριασμού στο GitHub](./img/media/image1.png)
-
-Στη συνέχεια θα μας αποσταλεί ένα επιβεβαιωτικό email στη διεύθυνση που δηλώσαμε με έναν κωδικό επιβεβαίωσης τον οποίο θα πρέπει να εισάγουμε για να ολοκληρωθεί η δημιουργία του λογαριασμού μας.
-
-![Η φόρμα του GitHub για την εισαγωγή του κωδικού επιβεβαίωσης](./img/media/image2.png)
-
-Όταν εισάγουμε τον κωδικό επιβεβαίωσης ολοκληρώνεται η διαδικασία και ο λογαριασμός μας στο GitHub είναι έτοιμος προς χρήση.
-
-**Σύνδεση του λογαριασμού μας στο εργαστήριο με το λογαριασμό μας στο GitHub**
-
-Για να μπορούμε να χρησιμοποιήσουμε το GitHub ως αποθετήριο όταν εκτελούμε την εντολή git στα μηχανήματα του εργαστηρίου linux, θα πρέπει να δημιουργήσουμε ένα ζεύγος κλειδιών αυθεντικοποίησης και να το ορίσουμε ως έμπιστο στην υπηρεσία GitHub.
-
-### 6.2 Δημιουργία προσωπικού κλειδιού
-
-Η δημιουργία του κλειδιού γίνεται με την εντολή ssh-keygen, όπως φαίνεται παρακάτω
+Στο [Εργαστήριο #0](https://progintro.github.io/lab-material/labs/lab00/#github) φτιάξαμε λογαριασμό στο GitHub, προσθέσαμε σε αυτόν το προσωπικό μας κλειδί ssh και ρυθμίσαμε το git. Πριν συνεχίσετε, επιβεβαιώστε από το μηχάνημα του εργαστηρίου ότι η σύνδεση με το GitHub δουλεύει:
 
 ```text
-linux12:~>ssh-keygen
-Generating public/private rsa key pair.
-Enter file in which to save the key
-(/home/users/sdiXXYYYYY/.ssh/id_rsa):
-Created directory '/home/users/sdiXXYYYYY/.ssh'.
-Enter passphrase (empty for no passphrase):
-Enter same passphrase again:
-Your identification has been saved in .ssh/id_rsa
-Your public key has been saved in .ssh/id_rsa.pub
-The key fingerprint is:
-SHA256:Pb9/DeknwuU8cETcXME41Jyx0841g35W8kWB1TNjQFY sdiXXYYYYY@linux12
-The key's randomart image is:
-+---[RSA 3072]----+
-|            o*XEX|
-|            .++@*|
-|             o+=O|
-|         .  . .=B|
-|        S o  o ++|
-|           o. B  |
-|           ..B ..|
-|            o.* +|
-|            .o.= |
-+----[SHA256]-----+
+linux12:~>ssh -T git@github.com
+Hi YourGitHub! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
-### 6.3 Εκτύπωση προσωπικού κλειδιού
-
-Εκτυπώνουμε τα περιεχόμενα του αρχείου **που περιέχει το public key** με την εντολή `cat`:
-
-```text
-linux12:~>cat .ssh/id_rsa.pub
-
-ssh-rsa
-AAAAB3NzaC1yc2EAAAADAQABAAABgQDL
-VHLGnzFEqkFqUizJQ/ILdmVtKpV8goIMo+vlb2AEySALQnfsvES1KaIOseIwatx1
-CSwUzbUrE41yXK47PfU1vZ0D4H4MvsvDuMiGLbuKAwogyKpc+Gx4EyNTsQqKvM2l
-/uYlH/p1B+b/6Pi7P7hwDUXN6PPmyViXAjrjFyb4mwbPldxwDLYA0FwvMgb/Mk5q
-6iJKO2RhkQOm1PtVdWcg+Y6i/VVLyj9gBZVOdCelDPZZBZcIGkCC9ZLo35+LcDjt
-frQC+hFNlCzdrOIUkHyAgtkXp8cR8ZAAUVr1sFXVlP9QXOTQqB6wWieclvj65t4s
-3UW0BoYlrPRz+c4FIUVw4BID5Qt8OWEUwlYmq4h+OactociwLg1CNUU2o82OfmCH
-IPlsU+YnSoFxUUUGwhimMnItWd7XD07Oc2M5w3o2ITaERdYwTZ9zFo1guj66DYnJ
-XqIhr9KifpFY3XoI2D35gyMdWU2pr/ABrxGLV2e6avIvYZ8RNteQuQETSr+OTKM=
-sdiXXYYYYY@linux12
-```
-
-### 6.4 Προσθήκη προσωπικού κλειδιού στο GitHub
-
-Τώρα πρέπει να εισάγουμε το παραπάνω κλειδί στο GitHub. Όντας συνδεδεμένοι με το λογαριασμό που έχουμε στο github.com, πατάμε το εικονίδιο στην πάνω δεξιά γωνία, και στο μενού που θα ανοίξει επιλέγουμε το «Settings».
-
-![Το μενού του λογαριασμού στο GitHub με την επιλογή «Settings»](./img/media/image3.png)
-
-Στη συνέχεια επιλέγουμε το «SSH and GPG keys» και πατάμε την επιλογή «New SSH Key», όπως φαίνεται παρακάτω:
-
-![Η σελίδα «SSH and GPG keys» με το κουμπί «New SSH Key»](./img/media/image4.png)
-
-Τέλος συμπληρώνουμε ένα όνομα, κάνουμε copy-paste το κλειδί από το βήμα 2 και πατάμε «Add SSH Key»
-
-![Η φόρμα καταχώρισης του δημόσιου κλειδιού με το κουμπί «Add SSH Key»](./img/media/image5.png)
-
-### 6.5 Ρύθμιση των παραμέτρων του git
-
-
-Εκτελούμε τις παρακάτω εντολές, αντικαθιστώντας στα αντίστοιχα σημεία τη διεύθυνση email μας καθώς και το όνομά μας με λατινικούς χαρακτήρες:
-
-```text
-git config --global user.email sdiXXYYYYY@di.uoa.gr
-
-git config --global user.name "Christos Dokimopoulos"
-```
-
-Είμαστε πλέον έτοιμοι να χρησιμοποιήσουμε το git!
+Αν αντί γι' αυτό δείτε `Permission denied (publickey)`, ή αν το `git config --global user.name` δεν τυπώνει το όνομά σας, επιστρέψτε στο [Βήμα 9 του Εργαστηρίου #0](https://progintro.github.io/lab-material/labs/lab00/#github-ssh) και ολοκληρώστε το.
 
 ## Άσκηση 1: Το πρώτο σας repository (info.txt)
 
-Πατήστε τον [ακόλουθο σύνδεσμο](https://classroom.github.com/a/8_3_scjJ) για να δημιουργήσετε το δικό σας repository `progintro/lab01-YourGitHub` και πραγματοποιήστε τα ακόλουθα βήματα:
+Θα φτιάξετε ένα repository με όνομα `lab01` στον δικό σας λογαριασμό στο GitHub, δηλαδή `YourGitHub/lab01`, όπου `YourGitHub` είναι το όνομα χρήστη σας στο GitHub.
 
-1. Κατεβάστε το repository τοπικά τρέχοντας την εντολή:
+1. Όντας συνδεδεμένοι στο github.com, ανοίξτε τη διεύθυνση <https://github.com/new>. Στο «Repository name» γράψτε `lab01`, επιλέξτε «Private» και ενεργοποιήστε την επιλογή «Add a README file». Πατήστε «Create repository».
+
+2. Κατεβάστε το repository τοπικά τρέχοντας την εντολή:
 
 ```text
-$ git clone git@github.com:progintro/lab01-YourGitHub
-Cloning into 'lab01-ethan42'...
+$ git clone git@github.com:YourGitHub/lab01
+Cloning into 'lab01'...
 remote: Enumerating objects: 3, done.
 remote: Counting objects: 100% (3/3), done.
 remote: Compressing objects: 100% (2/2), done.
@@ -454,25 +365,25 @@ Receiving objects: 100% (3/3), 5.10 KiB | 871.00 KiB/s, done.
 remote: Total 3 (delta 0), reused 2 (delta 0), pack-reused 0 (from 0)
 ```
 
-2. Μέσα στον φάκελο `lab01-YourGitHub` που δημιούργησε η παραπάνω εντολή, προσθέστε ένα αρχείο `info.txt` με τα ακόλουθα στοιχεία:
+3. Μέσα στον φάκελο `lab01` που δημιούργησε η παραπάνω εντολή, προσθέστε ένα αρχείο `info.txt` με τα ακόλουθα στοιχεία:
 
 ```text
 Όνομα, Επώνυμο, sdiXXYYYYY (εφόσον έχετε)
 ```
 
-3. Προσθέστε το αρχείο σας στο repository χρησιμοποιώντας την εντολή `git add`:
+4. Προσθέστε το αρχείο σας στο repository χρησιμοποιώντας την εντολή `git add`:
 
 ```text
 git add info.txt
 ```
 
-4. Τρέξτε την εντολή `git commit` για να μονιμοποιήσετε τις αλλαγές σας:
+5. Τρέξτε την εντολή `git commit` για να μονιμοποιήσετε τις αλλαγές σας:
 
 ```text
 git commit
 ```
 
-5. Τρέξτε την εντολή `git push` για να ανεβάσετε τις αλλαγές σας στο GitHub.
+6. Τρέξτε την εντολή `git push` για να ανεβάσετε τις αλλαγές σας στο GitHub.
 
 ```text
 $ git push
@@ -482,11 +393,11 @@ Delta compression using up to 4 threads
 Compressing objects: 100% (2/2), done.
 Writing objects: 100% (3/3), 319 bytes | 63.00 KiB/s, done.
 Total 3 (delta 0), reused 0 (delta 0)
-To github.com:progintro/lab01-ethan42
+To github.com:ethan42/lab01
    4ef457c..aa9f709  main -> main
 ```
 
-Επιβεβαιώστε ότι βλέπετε τις αλλαγές πηγαίνοντας στο αντίστοιχο link του repository σας: <https://github.com/progintro/lab01-YourGitHub>.
+Επιβεβαιώστε ότι βλέπετε τις αλλαγές πηγαίνοντας στο αντίστοιχο link του repository σας: <https://github.com/YourGitHub/lab01>.
 
 ## Για να πάτε παρακάτω (Προαιρετικό)
 

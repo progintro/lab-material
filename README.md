@@ -32,7 +32,7 @@
       <td rowspan="3" class="part"><span>Α: Εργαλεία</span></td>
       <td class="num">0</td>
       <td><a href="labs/lab00/">Καλημέρα Κόσμε! Εισαγωγή και Χρήσιμες Εφαρμογές</a></td>
-      <td>webmail, Piazza, λογαριασμός Linux, ssh, shell, editors, Hello World</td>
+      <td>webmail, Piazza, GitHub, λογαριασμός Linux, ssh, shell, editors, Hello World</td>
     </tr>
     <tr>
       <td class="num">1</td>

@@ -5,3 +5,4 @@ _site
 .jekyll-cache
 README-pdf.md
 all.md
+__pycache__/

@@ -20,9 +20,9 @@ make build/lab05.pdf          # ένα μόνο εργαστήριο (γρήγο
 make labs/lab05/README-out.md # μόνο το στάδιο mermaid → PNG
 ```
 
-Τα παραγόμενα PDF βρίσκονται στον κατάλογο `build/`.
+Τα παραγόμενα PDF βρίσκονται στον φάκελο `build/`.
 
-Τα ενδιάμεσα αρχεία `README-out.md` και `README-out-*.png`, όπως και ο κατάλογος
+Τα ενδιάμεσα αρχεία `README-out.md` και `README-out-*.png`, όπως και ο φάκελος
 `build/`, είναι στο `.gitignore` και δεν πρέπει να μπαίνουν σε commit.
 
 ## Πώς δουλεύει το build

@@ -152,9 +152,9 @@ gcc -o circularprime circularprime.c -lm
 
 ## CI
 
-- `.github/workflows/publish.yml` — on GitHub **release published** or manual dispatch:
-  auto-increments the patch component of the latest tag, pushes the new tag, runs `make`,
-  and uploads every `build/*.pdf` as release assets via `hub`. Releases are the
-  distribution channel for the handouts.
+- `.github/workflows/publish.yml` — on every **push to `main`** (or manual dispatch):
+  auto-increments the patch component of the latest tag, runs `make`, and creates a
+  release with that tag on the pushed commit, with every `build/*.pdf` as an asset.
+  Releases are the distribution channel for the handouts; don't create them by hand.
 - `.github/workflows/kaizen.yml` — manual-dispatch-only AI review pass (`ethan42/kaizen`);
   not part of the normal build.

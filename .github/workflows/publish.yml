@@ -1,9 +1,14 @@
 name: Publish lab PDFs
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
   workflow_dispatch:
+
+# One release at a time, in push order, so two quick merges don't compute the same tag.
+concurrency:
+  group: publish
+  cancel-in-progress: false
 
 jobs:
   convert-markdown-to-pdf:
@@ -40,18 +45,16 @@ jobs:
         echo "New version: $new_version"
         echo "version=$new_version" >> "$GITHUB_OUTPUT"
 
-    - name: Create new tag
-      run: |
-        git tag "${{ steps.new_version.outputs.version }}"
-        git push origin "${{ steps.new_version.outputs.version }}"
-
     - name: Build PDFs
       run: make
 
+    # Creates the tag on the pushed commit only after the build succeeded, so a failed
+    # build leaves no orphan tag behind.
     - name: Upload PDFs to GitHub Releases
       run: |
         tag_name="${{ steps.new_version.outputs.version }}"
         gh release create "$tag_name" build/*.pdf \
+          --target "$GITHUB_SHA" \
           --title "$tag_name" \
           --notes "Εργαστηριακό υλικό — έκδοση $tag_name"
       env:
